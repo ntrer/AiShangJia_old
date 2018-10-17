@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CityActivity extends BaseActivity {
 
     private RecyclerView mRecyclerView;
+    private ProgressBar mProgressBar;
     private String token_id=null;
     private List<Sheng.DataListBean> mDataListBeen;
     private ShengAdapter mShengAdapter;
@@ -45,6 +47,7 @@ public class CityActivity extends BaseActivity {
         mRecyclerView= (RecyclerView) findViewById(R.id.rv_sheng);
         token_id= PreferencesUtils.getString(this,"token_id");
         mToolbar= (Toolbar) findViewById(R.id.toolbar);
+        mProgressBar=findViewById(R.id.loading);
         //设置支持toolbar
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -54,38 +57,51 @@ public class CityActivity extends BaseActivity {
     }
 
     private void initData(String token_id) {
+        mProgressBar.setVisibility(View.VISIBLE);
         String url= BaseUrl.BASE_URL+"addressController.do?method=getSheng&token_id="+token_id;
         Log.d("BaseUrl",url);
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        if(response!=null){
-                            Sheng sheng = JSONUtil.fromJson(response, Sheng.class);
-                            if(sheng.getRet().equals("200")){
-                                mDataListBeen = sheng.getDataList();
-                                showData(mDataListBeen);
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            if(response!=null){
+                                Sheng sheng = JSONUtil.fromJson(response, Sheng.class);
+                                if(sheng.getRet().equals("200")){
+                                    mProgressBar.setVisibility(View.GONE);
+                                    mDataListBeen = sheng.getDataList();
+                                    showData(mDataListBeen);
+                                }
+                                else {
+                                    mProgressBar.setVisibility(View.GONE);
+                                    ToastUtils.showLong(""+sheng.getMsg());
+                                }
                             }
                             else {
-                                ToastUtils.showLong(""+sheng.getMsg());
+                                mProgressBar.setVisibility(View.GONE);
                             }
                         }
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(CityActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
-                    }
-                }).error(new IError() {
-            @Override
-            public void onError(int code, String msg) {
-                Toast.makeText(CityActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
-            }
-        })
-                .build()
-                .get();
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            mProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(CityActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                        }
+                    }).error(new IError() {
+                @Override
+                public void onError(int code, String msg) {
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(CityActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
+                }
+            })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+
+        }
     }
 
     private void initRecyclerView() {

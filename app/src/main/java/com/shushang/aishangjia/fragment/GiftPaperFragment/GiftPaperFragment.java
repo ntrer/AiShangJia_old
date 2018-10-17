@@ -168,7 +168,7 @@ public class GiftPaperFragment extends BaseFragment {
                             try {
                                 TabList tabList = JSONUtil.fromJson(response, TabList.class);
                                 if(tabList.getRet().equals("101")){
-                                    Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, ""+tabList.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(mContext,"token_id",null);
                                     startActivity(new Intent(getActivity(), LoginActivity2.class));
                                     getActivity().finish();

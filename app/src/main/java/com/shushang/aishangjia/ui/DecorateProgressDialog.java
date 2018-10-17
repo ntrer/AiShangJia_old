@@ -95,7 +95,6 @@ public class DecorateProgressDialog extends Dialog  {
 //        mDecorateBeanList.add(new DecorateBean("木工"));
 //        mDecorateBeanList.add(new DecorateBean("油漆"));
 
-        mDecorateBeanList.add(new DecorateBean("微信引流"));
         mDecorateBeanList.add(new DecorateBean("客户介绍"));
         mDecorateBeanList.add(new DecorateBean("广告"));
         mDecorateBeanList.add(new DecorateBean("销售拜访"));

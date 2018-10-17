@@ -3,11 +3,13 @@ package com.shushang.aishangjia.activity;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
@@ -36,8 +38,11 @@ public class ActivityListActivity extends BaseActivity {
     private LinearLayout ll_nodata;
     private ActivityListAdapter mActivityListAdapter;
     private List<ActivityList.DataListBean> dataList=new ArrayList<>();
+    private String type;
+    private Toolbar mToolbar;
     //退出时的时间
     private long mExitTime;
+    private ProgressBar mProgressBar;
     @Override
     public int setLayout() {
         return R.layout.activity_list;
@@ -45,8 +50,10 @@ public class ActivityListActivity extends BaseActivity {
 
     @Override
     public void init() {
+        mToolbar=findViewById(R.id.toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_activity);
         ll_nodata= (LinearLayout) findViewById(R.id.ll_no_data);
+        mProgressBar=findViewById(R.id.loading);
         token_id = PreferencesUtils.getString(this, "token_id");
         mButton= (Button) findViewById(R.id.btn_quit);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +78,7 @@ public class ActivityListActivity extends BaseActivity {
     }
 
     private void initData() {
+        mProgressBar.setVisibility(View.VISIBLE);
         String url = BaseUrl.BASE_URL+"phoneApi/activityController.do?method=getActivitys&token_id=" + token_id;
         Log.d("BaseUrl", url);
         try {
@@ -85,26 +93,32 @@ public class ActivityListActivity extends BaseActivity {
                                     if(activityList.getRet().equals("200")){
                                         dataList = activityList.getDataList();
                                         if(dataList.size()!=0){
+                                            mProgressBar.setVisibility(View.GONE);
                                             ll_nodata.setVisibility(View.GONE);
                                             mButton.setVisibility(View.GONE);
                                             showData(dataList);
                                         }
                                         else {
+                                            mProgressBar.setVisibility(View.GONE);
                                             ll_nodata.setVisibility(View.VISIBLE);
                                             mButton.setVisibility(View.VISIBLE);
+
 //                                    PreferencesUtils.putString(ActivityListActivity.this, "token_id",null);
 //                                    startActivity(new Intent(ActivityListActivity.this,LoginActivity2.class));
 //                                    finish();
                                         }
                                     }
                                     else {
+                                        mProgressBar.setVisibility(View.GONE);
                                         PreferencesUtils.putString(ActivityListActivity.this, "token_id",null);
                                         startActivity(new Intent(ActivityListActivity.this,LoginActivity2.class));
                                         finish();
                                     }
                                 }
                                 catch (Exception e){
-
+                                    mProgressBar.setVisibility(View.GONE);
+                                    ll_nodata.setVisibility(View.VISIBLE);
+                                    Toast.makeText(ActivityListActivity.this, ""+e, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
@@ -112,6 +126,7 @@ public class ActivityListActivity extends BaseActivity {
                     .failure(new IFailure() {
                         @Override
                         public void onFailure() {
+                            mProgressBar.setVisibility(View.GONE);
                             ll_nodata.setVisibility(View.VISIBLE);
                             mButton.setVisibility(View.VISIBLE);
                             Toast.makeText(ActivityListActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
@@ -119,6 +134,8 @@ public class ActivityListActivity extends BaseActivity {
                     }).error(new IError() {
                 @Override
                 public void onError(int code, String msg) {
+                    ll_nodata.setVisibility(View.VISIBLE);
+                    mProgressBar.setVisibility(View.GONE);
                     Toast.makeText(ActivityListActivity.this, "" + msg, Toast.LENGTH_SHORT).show();
                 }
             })
@@ -141,6 +158,7 @@ public class ActivityListActivity extends BaseActivity {
                 String activityId =dataList.get(position).getActivityId();
                 String roleType=dataList.get(position).getRoleType();
                 PreferencesUtils.putString(ActivityListActivity.this,"activityId",activityId);
+                Log.d("wocaoyd",activityId+"");
                 PreferencesUtils.putString(ActivityListActivity.this,"roleType",roleType);
                 startActivity(new Intent(ActivityListActivity.this, MainActivity.class));
                finish();
@@ -152,7 +170,7 @@ public class ActivityListActivity extends BaseActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            exit();
+                exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -170,4 +188,6 @@ public class ActivityListActivity extends BaseActivity {
             System.exit(0);
         }
     }
+
+
 }

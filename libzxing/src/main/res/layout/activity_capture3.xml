@@ -176,7 +176,7 @@
                                 android:layout_marginLeft="@dimen/dp_10"
                                 android:layout_marginTop="@dimen/dp_5"
                                 android:layout_marginBottom="@dimen/dp_5"
-                                android:text="省市:"
+                                android:text="地址:"
                                 android:textSize="@dimen/sp_16"
                                 android:textColor="@color/white"
                                 />

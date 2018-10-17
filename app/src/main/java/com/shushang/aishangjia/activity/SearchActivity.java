@@ -1,6 +1,8 @@
 package com.shushang.aishangjia.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -18,6 +20,9 @@ import android.widget.ProgressBar;
 import com.githang.statusbar.StatusBarCompat;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.refreshHander.SearchDataRefreshHandler;
+import com.shushang.aishangjia.base.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -26,6 +31,21 @@ public class SearchActivity extends AppCompatActivity {
     private SearchDataRefreshHandler mSearchDataRefreshHandler;
     private ProgressBar mProgressBar;
     private LinearLayout ll_noData;
+    private String query_text;
+    public Handler mHandler=new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            switch (message.what){
+                case 1:
+                    getData(query_text);
+                    break;
+                case 2:
+                    getData(query_text);
+                    break;
+            }
+            return false;
+        }
+    });
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +65,7 @@ public class SearchActivity extends AppCompatActivity {
         //设置支持toolbar
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mSearchDataRefreshHandler=SearchDataRefreshHandler.create(mRecyclerView,mProgressBar,ll_noData);
+        mSearchDataRefreshHandler=SearchDataRefreshHandler.create(mRecyclerView,mProgressBar,ll_noData,mHandler);
     }
 
 
@@ -85,6 +105,7 @@ public class SearchActivity extends AppCompatActivity {
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                query_text=query;
                 getData(query);
                 search.clearFocus();
                 return false;
@@ -115,7 +136,9 @@ public class SearchActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.activity_in, R.anim.activity_out);
     }
 
-
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().post(new MessageEvent(""));
+    }
 }

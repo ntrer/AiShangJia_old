@@ -7,9 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.shushang.aishangjia.Bean.Qu;
 import com.shushang.aishangjia.R;
@@ -38,7 +40,7 @@ public class QuActivity extends BaseActivity {
     private List<Qu.DataListBean> dataList;
     private QuAdapter mQuAdapter;
     private Toolbar mToolbar;
-
+    private ProgressBar mProgressBar;
     @Override
     public int setLayout() {
         return R.layout.activity_qu;
@@ -58,6 +60,7 @@ public class QuActivity extends BaseActivity {
         shi_name=intent.getStringExtra("shi_name");
         mTextView= (TextView) findViewById(R.id.select_qu);
         mTextView.setText(sheng_name+shi_name);
+        mProgressBar=findViewById(R.id.loading);
         mRecyclerView= (RecyclerView) findViewById(R.id.rv_qu);
         token_id= PreferencesUtils.getString(this,"token_id");
         initData(token_id);
@@ -70,31 +73,51 @@ public class QuActivity extends BaseActivity {
     }
 
     private void initData(String token_id) {
+        mProgressBar.setVisibility(View.VISIBLE);
         String url= BaseUrl.BASE_URL+"addressController.do?method=getQuByShiCode&token_id="+token_id+"&shiCode="+shi_code;
         Log.d("BaseUrl",url);
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Qu qu = JSONUtil.fromJson(response, Qu.class);
-                        dataList = qu.getDataList();
-                        showData(dataList);
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(QuActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
-                    }
-                }).error(new IError() {
-            @Override
-            public void onError(int code, String msg) {
-                Toast.makeText(QuActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
-            }
-        })
-                .build()
-                .get();
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            if(response!=null){
+                                Qu qu = JSONUtil.fromJson(response, Qu.class);
+                                if(qu.getRet().equals("200")){
+                                    mProgressBar.setVisibility(View.GONE);
+                                    dataList = qu.getDataList();
+                                    showData(dataList);
+                                }
+                                else {
+                                    mProgressBar.setVisibility(View.GONE);
+                                    ToastUtils.showLong(""+qu.getMsg());
+                                }
+                            }
+                            else {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            mProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(QuActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                        }
+                    }).error(new IError() {
+                @Override
+                public void onError(int code, String msg) {
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(QuActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
+                }
+            })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+
+        }
     }
 
     private void showData(final List<Qu.DataListBean> dataList) {

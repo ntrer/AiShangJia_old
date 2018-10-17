@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">e见家装</string>
     <string name="unlogin">未登录</string>
+    <string name="unlogin2">请登录</string>
     <string name="reco">已认证</string>
     <string name="paper">我的钱包</string>
     <string name="achive">我的战绩</string>
@@ -70,6 +71,25 @@
     <string name="pk">业绩大pk</string>
     <string name="xiansuochi">线索池</string>
     <string name="customer">客户</string>
-    <string name="sign_list">签到</string>>
+    <string name="sign_list">签到</string>
+    <string name="shaixuan">筛选</string>
+    <string name="money">金额</string>
+    <string name="genjinjilu">跟进记录</string>
+    <string name="xiangxiziliao">详细资料</string>
+    <string name="FlingBehavior">com.shushang.aishangjia.ui.FlingBehavior</string>
+    <string name="suoyouren">客户所有人</string>
+    <string name="kehumingcheng">客户名称</string>
+    <string name="new_time">最新活动记录时间</string>
+    <string name="create_time">创建日期</string>
+    <string name="new_edit_people">最新修改人</string>
+    <string name="edit_time">最新修改日</string>
+    <string name="customer_laiyuan">来源</string>
+    <string name="customer_cardNum">卡号</string>
+    <string name="get_cardNum">获取卡号</string>
+    <string name="customer_kahao">卡号</string>
+    <string name="sure">确定</string>
+    <string name="message">此模式下，你将先从服务器同步数据库到本地，然后在本地进行签到</string>
+    <string name="getDataBase">同步数据库中...</string>
+    <string name="edit">姓名，卡号，手机号，性别无法修改</string>
 </resources>
 

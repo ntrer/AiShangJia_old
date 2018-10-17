@@ -13,20 +13,12 @@ public class Activity {
      * ret : 200
      * msg : success
      * data : null
-     * dataList : [{"activityId":"402880b76511fd0c0165120a81c80016","activityCode":1030,"activityName":"全民大抢购","eventStart":1533398415000,"eventEnd":1535644815000,"sellCardStart":1533484815000,"sellCardEnd":1533916815000,"sceneStart":1533605992000,"sceneEnd":1535644815000,"chuangjianren":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533606003000,"xgsj":1533606003000,"del":"0","active":"1","merchantId":"402880b764ef440c0164ef563be60041","merchants":null},{"activityId":"402880b76511fd0c0165120b4571001d","activityCode":1031,"activityName":"购物马拉松","eventStart":1533398419000,"eventEnd":1535644819000,"sellCardStart":1533484819000,"sellCardEnd":1533916819000,"sceneStart":1533606047000,"sceneEnd":1535644819000,"chuangjianren":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533606053000,"xgsj":1533606053000,"del":"0","active":"1","merchantId":"402880b764ef440c0164ef563be60041","merchants":null},{"activityId":"402880b76511fd0c0165120f64110029","activityCode":1033,"activityName":"秋季买就送","eventStart":1533606298000,"eventEnd":1535644800000,"sellCardStart":1533657632000,"sellCardEnd":1533916832000,"sceneStart":1533606316000,"sceneEnd":1535644832000,"chuangjianren":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533606323000,"xgsj":1533606323000,"del":"0","active":"1","merchantId":"402880b764ef440c0164ef563be60041","merchants":null},{"activityId":"402880b76511fd0c0165127961fe00dc","activityCode":1034,"activityName":"郑州家装大促","eventStart":1533398404000,"eventEnd":1535644804000,"sellCardStart":1533613254000,"sellCardEnd":1533916804000,"sceneStart":1533657604000,"sceneEnd":1535644804000,"chuangjianren":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533613270000,"xgsj":1533613473000,"del":"0","active":"1","merchantId":"402880b764ef440c0164ef563be60041","merchants":null}]
-     * intcurrentPage : 0
-     * intpageSize : 0
-     * intmaxCount : 0
-     * intmaxPage : 0
+     * dataList : [{"activityId":"402880b7653b275e01653c3ed98800a8","activityCode":1049,"activityName":"安阳万达双11送大礼","eventStart":1533052800000,"eventEnd":1538323200000,"sellCardStart":1527782400000,"sellCardEnd":1538323200000,"sceneStart":1534780800000,"sceneEnd":1534867200000,"chuangjianren":"402880b7653b275e01653b68e4d00046","xiugairen":"402880b7653b275e01653b68e4d00046","cjsj":1534314077000,"xgsj":1534316617000,"del":"0","active":"1","merchantId":"402880b7653b275e01653b68e4cf0045","merchants":null,"coverImageId":null,"shengCode":"410000","shengName":"河南省","shiCode":"410500","shiName":"安阳市","quCode":null,"quName":null,"qdjpname":"玩偶","yxjpname":"折叠凳","isUnderLine":null}]
      */
 
     private String ret;
     private String msg;
     private Object data;
-    private int intcurrentPage;
-    private int intpageSize;
-    private int intmaxCount;
-    private int intmaxPage;
     private List<DataListBean> dataList;
 
     public String getRet() {
@@ -53,38 +45,6 @@ public class Activity {
         this.data = data;
     }
 
-    public int getIntcurrentPage() {
-        return intcurrentPage;
-    }
-
-    public void setIntcurrentPage(int intcurrentPage) {
-        this.intcurrentPage = intcurrentPage;
-    }
-
-    public int getIntpageSize() {
-        return intpageSize;
-    }
-
-    public void setIntpageSize(int intpageSize) {
-        this.intpageSize = intpageSize;
-    }
-
-    public int getIntmaxCount() {
-        return intmaxCount;
-    }
-
-    public void setIntmaxCount(int intmaxCount) {
-        this.intmaxCount = intmaxCount;
-    }
-
-    public int getIntmaxPage() {
-        return intmaxPage;
-    }
-
-    public void setIntmaxPage(int intmaxPage) {
-        this.intmaxPage = intmaxPage;
-    }
-
     public List<DataListBean> getDataList() {
         return dataList;
     }
@@ -95,23 +55,33 @@ public class Activity {
 
     public static class DataListBean {
         /**
-         * activityId : 402880b76511fd0c0165120a81c80016
-         * activityCode : 1030
-         * activityName : 全民大抢购
-         * eventStart : 1533398415000
-         * eventEnd : 1535644815000
-         * sellCardStart : 1533484815000
-         * sellCardEnd : 1533916815000
-         * sceneStart : 1533605992000
-         * sceneEnd : 1535644815000
-         * chuangjianren : asdfghjkl123qwertg
-         * xiugairen : asdfghjkl123qwertg
-         * cjsj : 1533606003000
-         * xgsj : 1533606003000
+         * activityId : 402880b7653b275e01653c3ed98800a8
+         * activityCode : 1049
+         * activityName : 安阳万达双11送大礼
+         * eventStart : 1533052800000
+         * eventEnd : 1538323200000
+         * sellCardStart : 1527782400000
+         * sellCardEnd : 1538323200000
+         * sceneStart : 1534780800000
+         * sceneEnd : 1534867200000
+         * chuangjianren : 402880b7653b275e01653b68e4d00046
+         * xiugairen : 402880b7653b275e01653b68e4d00046
+         * cjsj : 1534314077000
+         * xgsj : 1534316617000
          * del : 0
          * active : 1
-         * merchantId : 402880b764ef440c0164ef563be60041
+         * merchantId : 402880b7653b275e01653b68e4cf0045
          * merchants : null
+         * coverImageId : null
+         * shengCode : 410000
+         * shengName : 河南省
+         * shiCode : 410500
+         * shiName : 安阳市
+         * quCode : null
+         * quName : null
+         * qdjpname : 玩偶
+         * yxjpname : 折叠凳
+         * isUnderLine : null
          */
 
         private String activityId;
@@ -131,6 +101,17 @@ public class Activity {
         private String active;
         private String merchantId;
         private Object merchants;
+        private Object coverImageId;
+        private String shengCode;
+        private String shengName;
+        private String shiCode;
+        private String shiName;
+        private Object quCode;
+        private Object quName;
+        private String qdjpname;
+        private String yxjpname;
+        private Object isUnderLine;
+        private Object isCheck;
 
         public String getActivityId() {
             return activityId;
@@ -266,6 +247,94 @@ public class Activity {
 
         public void setMerchants(Object merchants) {
             this.merchants = merchants;
+        }
+
+        public Object getCoverImageId() {
+            return coverImageId;
+        }
+
+        public void setCoverImageId(Object coverImageId) {
+            this.coverImageId = coverImageId;
+        }
+
+        public String getShengCode() {
+            return shengCode;
+        }
+
+        public void setShengCode(String shengCode) {
+            this.shengCode = shengCode;
+        }
+
+        public String getShengName() {
+            return shengName;
+        }
+
+        public void setShengName(String shengName) {
+            this.shengName = shengName;
+        }
+
+        public String getShiCode() {
+            return shiCode;
+        }
+
+        public void setShiCode(String shiCode) {
+            this.shiCode = shiCode;
+        }
+
+        public String getShiName() {
+            return shiName;
+        }
+
+        public void setShiName(String shiName) {
+            this.shiName = shiName;
+        }
+
+        public Object getQuCode() {
+            return quCode;
+        }
+
+        public void setQuCode(Object quCode) {
+            this.quCode = quCode;
+        }
+
+        public Object getQuName() {
+            return quName;
+        }
+
+        public void setQuName(Object quName) {
+            this.quName = quName;
+        }
+
+        public String getQdjpname() {
+            return qdjpname;
+        }
+
+        public void setQdjpname(String qdjpname) {
+            this.qdjpname = qdjpname;
+        }
+
+        public String getYxjpname() {
+            return yxjpname;
+        }
+
+        public void setYxjpname(String yxjpname) {
+            this.yxjpname = yxjpname;
+        }
+
+        public Object getisCheck() {
+            return isCheck;
+        }
+
+        public void setisCheck(Object isCheck) {
+            this.isCheck = isCheck;
+        }
+
+        public Object getIsUnderLine() {
+            return isUnderLine;
+        }
+
+        public void setIsUnderLine(Object isUnderLine) {
+            this.isUnderLine = isUnderLine;
         }
     }
 }

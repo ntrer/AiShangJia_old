@@ -14,10 +14,10 @@ public class NewPeople implements Serializable {
      * ret : 200
      * msg : success
      * data : null
-     * dataList : [{"type":"1","activityId":null,"activityCode":null,"activityName":null,"username":"牛牛","phone":"18637280068","sex":"女","address":"黑龙江省伊春市翠峦区","sheng_code":"230000","shi_code":"230700","qu_code":"230706","sheng_name":"黑龙江省","shi_name":"伊春市","qu_name":"翠峦区","decorationProgress":"完成","decorationStyle":null,"likecolor":null,"thinkBuyGood":null,"merchantName":"数尚家具","merchantId":"402880b7652300d00165232941a2004b","cjsj":"2018-08-11 08:24:00"}]
+     * dataList : [{"type":"4","activityId":null,"activityCode":null,"activityName":null,"username":"ok","phone":"11111111111","sex":"未知","address":null,"sheng_code":null,"shi_code":null,"qu_code":null,"sheng_name":null,"shi_name":null,"qu_name":null,"decorationProgress":null,"decorationStyle":null,"likecolor":null,"thinkBuyGood":null,"merchantName":"数尚地板中华路","merchantId":"402880b7653b275e01653b69cc770050","cjsj":"2018-10-07 12:39:47","cardNum":"402880b7664bfdd101664cd2fc170009","customerActionId":"402880b7664bfdd101664cd2fc18000a"},{"type":"4","activityId":null,"activityCode":null,"activityName":null,"username":"jj","phone":"16666666666","sex":"未知","address":null,"sheng_code":null,"shi_code":null,"qu_code":null,"sheng_name":null,"shi_name":null,"qu_name":null,"decorationProgress":null,"decorationStyle":null,"likecolor":null,"thinkBuyGood":null,"merchantName":"数尚地板中华路","merchantId":"402880b7653b275e01653b69cc770050","cjsj":"2018-10-07 12:19:36","cardNum":"402880b7664bfdd101664cc0805a0005","customerActionId":"402880b7664bfdd101664cc0805a0006"},{"type":"4","activityId":null,"activityCode":null,"activityName":null,"username":"hj","phone":"15555555555","sex":"未知","address":null,"sheng_code":null,"shi_code":null,"qu_code":null,"sheng_name":null,"shi_name":null,"qu_name":null,"decorationProgress":null,"decorationStyle":null,"likecolor":null,"thinkBuyGood":null,"merchantName":"数尚地板中华路","merchantId":"402880b7653b275e01653b69cc770050","cjsj":"2018-10-07 12:19:03","cardNum":"402880b7664bfdd101664cbffdb40003","customerActionId":"402880b7664bfdd101664cbffdc90004"}]
      * intcurrentPage : 1
      * intpageSize : 10
-     * intmaxCount : 1
+     * intmaxCount : 3
      * intmaxPage : 1
      */
 
@@ -96,27 +96,29 @@ public class NewPeople implements Serializable {
 
     public static class DataListBean implements Serializable{
         /**
-         * type : 1
+         * type : 4
          * activityId : null
          * activityCode : null
          * activityName : null
-         * username : 牛牛
-         * phone : 18637280068
-         * sex : 女
-         * address : 黑龙江省伊春市翠峦区
-         * sheng_code : 230000
-         * shi_code : 230700
-         * qu_code : 230706
-         * sheng_name : 黑龙江省
-         * shi_name : 伊春市
-         * qu_name : 翠峦区
-         * decorationProgress : 完成
+         * username : ok
+         * phone : 11111111111
+         * sex : 未知
+         * address : null
+         * sheng_code : null
+         * shi_code : null
+         * qu_code : null
+         * sheng_name : null
+         * shi_name : null
+         * qu_name : null
+         * decorationProgress : null
          * decorationStyle : null
          * likecolor : null
          * thinkBuyGood : null
-         * merchantName : 数尚家具
-         * merchantId : 402880b7652300d00165232941a2004b
-         * cjsj : 2018-08-11 08:24:00
+         * merchantName : 数尚地板中华路
+         * merchantId : 402880b7653b275e01653b69cc770050
+         * cjsj : 2018-10-07 12:39:47
+         * cardNum : 402880b7664bfdd101664cd2fc170009
+         * customerActionId : 402880b7664bfdd101664cd2fc18000a
          */
 
         private String type;
@@ -126,20 +128,22 @@ public class NewPeople implements Serializable {
         private String username;
         private String phone;
         private String sex;
-        private String address;
-        private String sheng_code;
-        private String shi_code;
-        private String qu_code;
-        private String sheng_name;
-        private String shi_name;
-        private String qu_name;
-        private String decorationProgress;
+        private Object address;
+        private Object sheng_code;
+        private Object shi_code;
+        private Object qu_code;
+        private Object sheng_name;
+        private Object shi_name;
+        private Object qu_name;
+        private Object decorationProgress;
         private Object decorationStyle;
         private Object likecolor;
         private Object thinkBuyGood;
         private String merchantName;
         private String merchantId;
         private String cjsj;
+        private String cardNum;
+        private String customerActionId;
 
         public String getType() {
             return type;
@@ -197,67 +201,67 @@ public class NewPeople implements Serializable {
             this.sex = sex;
         }
 
-        public String getAddress() {
+        public Object getAddress() {
             return address;
         }
 
-        public void setAddress(String address) {
+        public void setAddress(Object address) {
             this.address = address;
         }
 
-        public String getSheng_code() {
+        public Object getSheng_code() {
             return sheng_code;
         }
 
-        public void setSheng_code(String sheng_code) {
+        public void setSheng_code(Object sheng_code) {
             this.sheng_code = sheng_code;
         }
 
-        public String getShi_code() {
+        public Object getShi_code() {
             return shi_code;
         }
 
-        public void setShi_code(String shi_code) {
+        public void setShi_code(Object shi_code) {
             this.shi_code = shi_code;
         }
 
-        public String getQu_code() {
+        public Object getQu_code() {
             return qu_code;
         }
 
-        public void setQu_code(String qu_code) {
+        public void setQu_code(Object qu_code) {
             this.qu_code = qu_code;
         }
 
-        public String getSheng_name() {
+        public Object getSheng_name() {
             return sheng_name;
         }
 
-        public void setSheng_name(String sheng_name) {
+        public void setSheng_name(Object sheng_name) {
             this.sheng_name = sheng_name;
         }
 
-        public String getShi_name() {
+        public Object getShi_name() {
             return shi_name;
         }
 
-        public void setShi_name(String shi_name) {
+        public void setShi_name(Object shi_name) {
             this.shi_name = shi_name;
         }
 
-        public String getQu_name() {
+        public Object getQu_name() {
             return qu_name;
         }
 
-        public void setQu_name(String qu_name) {
+        public void setQu_name(Object qu_name) {
             this.qu_name = qu_name;
         }
 
-        public String getDecorationProgress() {
+        public Object getDecorationProgress() {
             return decorationProgress;
         }
 
-        public void setDecorationProgress(String decorationProgress) {
+        public void setDecorationProgress(Object decorationProgress) {
             this.decorationProgress = decorationProgress;
         }
 
@@ -307,6 +311,22 @@ public class NewPeople implements Serializable {
 
         public void setCjsj(String cjsj) {
             this.cjsj = cjsj;
+        }
+
+        public String getCardNum() {
+            return cardNum;
+        }
+
+        public void setCardNum(String cardNum) {
+            this.cardNum = cardNum;
+        }
+
+        public String getCustomerActionId() {
+            return customerActionId;
+        }
+
+        public void setCustomerActionId(String customerActionId) {
+            this.customerActionId = customerActionId;
         }
     }
 }

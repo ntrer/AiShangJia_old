@@ -7,9 +7,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.shushang.aishangjia.Bean.Shi;
 import com.shushang.aishangjia.R;
@@ -38,6 +40,7 @@ public class ChildCityActivity extends BaseActivity {
     private List<Shi.DataListBean> dataList=new ArrayList<>();
     private ShiAdapter mShiAdapter;
     private Toolbar mToolbar;
+    private ProgressBar mProgressBar;
     @Override
     public int setLayout() {
         return R.layout.activity_child_city;
@@ -56,6 +59,7 @@ public class ChildCityActivity extends BaseActivity {
         mTextView= (TextView) findViewById(R.id.select_child_city);
         mTextView.setText(sheng_name);
         mRecyclerView= (RecyclerView) findViewById(R.id.rv_shi);
+        mProgressBar=findViewById(R.id.loading);
         token_id= PreferencesUtils.getString(this,"token_id");
         initData(token_id);
         initRecyclerView();
@@ -67,31 +71,51 @@ public class ChildCityActivity extends BaseActivity {
     }
 
     private void initData(String token_id) {
+        mProgressBar.setVisibility(View.VISIBLE);
         String url= BaseUrl.BASE_URL+"addressController.do?method=getShiByShengCode&token_id="+token_id+"&shengCode="+sheng_code;
         Log.d("BaseUrl",url);
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Shi shi = JSONUtil.fromJson(response, Shi.class);
-                        dataList = shi.getDataList();
-                        showData(dataList);
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(ChildCityActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
-                    }
-                }).error(new IError() {
-            @Override
-            public void onError(int code, String msg) {
-                Toast.makeText(ChildCityActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
-            }
-        })
-                .build()
-                .get();
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            if(response!=null){
+                                Shi shi = JSONUtil.fromJson(response, Shi.class);
+                                if(shi.getRet().equals("200")){
+                                    mProgressBar.setVisibility(View.GONE);
+                                    dataList = shi.getDataList();
+                                    showData(dataList);
+                                }
+                                else {
+                                    mProgressBar.setVisibility(View.GONE);
+                                    ToastUtils.showLong(""+shi.getMsg());
+                                }
+                            }
+                            else {
+                                mProgressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            mProgressBar.setVisibility(View.GONE);
+                            Toast.makeText(ChildCityActivity.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                        }
+                    }).error(new IError() {
+                @Override
+                public void onError(int code, String msg) {
+                    mProgressBar.setVisibility(View.GONE);
+                    Toast.makeText(ChildCityActivity.this, ""+msg, Toast.LENGTH_SHORT).show();
+                }
+            })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+
+        }
     }
 
     private void showData(final List<Shi.DataListBean> dataList) {

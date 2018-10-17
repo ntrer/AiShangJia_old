@@ -1,9 +1,7 @@
 package com.shushang.aishangjia.ui.MyFab;
 
-import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.support.design.widget.FloatingActionButton;
-import android.view.animation.DecelerateInterpolator;
 
 
 /**
@@ -29,22 +27,22 @@ public class FabAlphaAnimate extends AnimationManager {
         //判断展开的方向
         switch (orientation) {
             case FAB_TOP:
-                if (fab.getTag().equals(3)) {
-                    //透明动画
-                    ObjectAnimator alpha = ObjectAnimator.ofFloat(fab, "alpha", 0f, 1f);
-                    alpha.setDuration(fabView.getAnimateDuration() + 400);
-                    alpha.start();
-                } else if (fab.getTag().equals(2)) {
-                    //组合动画
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    ObjectAnimator scaleX = ObjectAnimator.ofFloat(fab, "scaleX", 0f, 1f);
-                    ObjectAnimator scaleY = ObjectAnimator.ofFloat(fab, "scaleY", 0f, 1f);
-                    animatorSet.setDuration(fabView.getAnimateDuration() + 400);
-                    animatorSet.setInterpolator(new DecelerateInterpolator());
-                    //两个动画同时开始
-                    animatorSet.play(scaleX).with(scaleY);
-                    animatorSet.start();
-                }
+//                if (fab.getTag().equals(3)) {
+//                    //透明动画
+//                    ObjectAnimator alpha = ObjectAnimator.ofFloat(fab, "alpha", 0f, 1f);
+//                    alpha.setDuration(fabView.getAnimateDuration() + 400);
+//                    alpha.start();
+//                } else if (fab.getTag().equals(2)) {
+//                    //组合动画
+//                    AnimatorSet animatorSet = new AnimatorSet();
+//                    ObjectAnimator scaleX = ObjectAnimator.ofFloat(fab, "scaleX", 0f, 1f);
+//                    ObjectAnimator scaleY = ObjectAnimator.ofFloat(fab, "scaleY", 0f, 1f);
+//                    animatorSet.setDuration(fabView.getAnimateDuration() + 400);
+//                    animatorSet.setInterpolator(new DecelerateInterpolator());
+//                    //两个动画同时开始
+//                    animatorSet.play(scaleX).with(scaleY);
+//                    animatorSet.start();
+//                }
                 break;
             case FAB_BOTTOM:
                 break;

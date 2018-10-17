@@ -79,8 +79,8 @@
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar2">
+            android:theme="@style/AppTheme.NoActionBar2"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".activity.ResetPwdActivity"
@@ -132,6 +132,11 @@
             android:theme="@style/AppTheme.NoActionBar2">
         </activity>
         <activity
+            android:name=".activity.ProActivityActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
             android:name=".activity.ActivityListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -144,34 +149,60 @@
         <activity
             android:name=".activity.NewPeopleDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar2">
+            android:theme="@style/AppTheme.NoActionBar2"
+            android:windowSoftInputMode="adjustResize"
+            >
         </activity>
         <activity
             android:name=".activity.ProgressActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar2">
         </activity>
-        <activity android:name=".activity.XiansuoActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar2"
-                  android:windowSoftInputMode="adjustResize"
-            />
+        <activity
+            android:name=".activity.XiansuoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
             android:theme="@android:style/Theme.Translucent"/>
-        <activity android:name=".activity.InfoActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar2"
-            >
+        <activity
+            android:name=".activity.InfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
         </activity>
-
-        <activity android:name=".activity.InfoActivity2"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar2"
-            >
+        <activity
+            android:name=".activity.InfoActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
         </activity>
-        <activity android:name=".activity.InfoActivity3"
+        <activity
+            android:name=".activity.InfoActivity3"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.XianSuoChiActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.YiXiangJInActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.DailyOrderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.XianSuoCustomerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity android:name=".activity.NoOnLineActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar2"
             >

@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.githang.statusbar.StatusBarCompat;
+import com.noober.background.BackgroundLibrary;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
 import com.umeng.analytics.MobclickAgent;
@@ -33,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        BackgroundLibrary.inject2(this);
         super.onCreate(savedInstanceState);
         ActivityStackManager.getActivityStackManager().pushActivity(this);
         setContentView(setLayout());

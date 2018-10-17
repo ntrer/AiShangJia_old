@@ -101,6 +101,7 @@
         android:layout_marginRight="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_20"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -121,9 +122,23 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:layout_gravity="center_vertical"
             android:text=""
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_150"
             android:layout_height="wrap_content"/>
+
+        <Button
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="刷新"
+            android:id="@+id/refresh"
+            android:layout_gravity="center_vertical"
+            android:textSize="@dimen/sp_12"
+            android:background="@drawable/button_border"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_25"/>
+
+
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="fill_parent"

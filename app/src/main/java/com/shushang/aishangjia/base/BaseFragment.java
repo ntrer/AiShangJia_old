@@ -24,7 +24,8 @@ public abstract class BaseFragment extends Fragment {
     protected boolean isLoad = false;
     public Context mContext;
     private View rootView;
-
+    private PermissionListener mListener;
+    private static final int PERMISSION_REQUESTCODE = 100;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,8 +100,6 @@ public abstract class BaseFragment extends Fragment {
     public void initListener() {
 
     }
-
-
 
     /**
      * 视图销毁的时候讲Fragment是否初始化的状态变为false

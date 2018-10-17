@@ -4,15 +4,21 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shushang.AppContext;
 import com.shushang.aishangjia.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @author WH
@@ -53,7 +59,7 @@ public class ExtAlertDialog {
                 dlg.dismiss();
             }
         });
-
+        dlg.setCancelable(false);
     }
 
     public static void showDialog(Context context, String title, String msg) {
@@ -203,7 +209,74 @@ public class ExtAlertDialog {
             }
         });
         dlg.setCancelable(isCancelable);
+        dlg.setCancelable(false);
     }
+
+
+
+    public static void showEditDlg(Context context, String title,String btnTxt, boolean isCancelable, final IExtDlgClick2 onclickListener) {
+        final AlertDialog dlg = new AlertDialog.Builder(context).create();
+        dlg.setView(new EditText(context));
+        dlg.show();
+        dlg.setContentView(R.layout.ext_edit_dialog);
+        dlg.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent);
+        View titleLayout = dlg.findViewById(R.id.title_layout2);
+        TextView titleTxt = (TextView) dlg.findViewById(R.id.ext_dialog_title2);
+        if (TextUtils.isEmpty(title))
+            titleLayout.setVisibility(View.GONE);
+        else
+            titleTxt.setText(title);
+        final EditText contentTxt =  dlg
+                .findViewById(R.id.ext_dialog_content2);
+        Button btn = (Button) dlg.findViewById(R.id.ext_dialog_btn2);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onclickListener != null)
+                    onclickListener.Oclick(0,null);
+                dlg.dismiss();
+            }
+        });
+
+        Button sureBnt = (Button) dlg.findViewById(R.id.sure2);
+        if (!TextUtils.isEmpty(btnTxt))
+            sureBnt.setText(btnTxt);
+
+        sureBnt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onclickListener != null)
+                    onclickListener.Oclick(1,contentTxt.getText());
+                dlg.dismiss();
+            }
+        });
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                contentTxt.setFocusable(true);
+                contentTxt.setFocusableInTouchMode(true);
+                //请求获得焦点
+                contentTxt.requestFocus();
+                //调用系统输入法
+                InputMethodManager inputManager = (InputMethodManager) contentTxt
+                        .getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(contentTxt, 0);
+            }
+        }, 200);
+
+        dlg.setCancelable(isCancelable);
+        dlg.setCancelable(false);
+    }
+
+
+
+
+
+
+
 
     /**
      * @param @param  context
@@ -268,6 +341,9 @@ public class ExtAlertDialog {
         public void Oclick(int result);
     }
 
+    public interface IExtDlgClick2 {
+        public void Oclick(int result, Editable editText);
+    }
 
     /**
      * 显示默认请求成功对话框
@@ -310,7 +386,6 @@ public class ExtAlertDialog {
 
         return dialog;
     }
-
 
 
 

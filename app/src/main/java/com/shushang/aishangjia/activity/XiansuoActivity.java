@@ -134,10 +134,8 @@ public class XiansuoActivity extends BaseActivity implements View.OnClickListene
             public void onDecorateProgressDialogClick(String itemName) {
                 mTvSource.setText("");
                 mTvSource.setText(itemName);
-                if(itemName.equals("微信引流")){
-                    source="1";
-                }
-                else if(itemName.equals("客户介绍")){
+
+                 if(itemName.equals("客户介绍")){
                     source="2";
                 }
                 else if(itemName.equals("广告")){
@@ -296,6 +294,7 @@ public class XiansuoActivity extends BaseActivity implements View.OnClickListene
                 if(mRequestDialog!=null&&mRequestDialog.isShowing()){
                     mRequestDialog.dismiss();
                 }
+                ToastUtils.showLong(e.toString());
             }
 
             @Override
@@ -438,7 +437,7 @@ public class XiansuoActivity extends BaseActivity implements View.OnClickListene
         电信：133、153、180、189、（1349卫通）
         总结起来就是第一位必定为1，第二位必定为3或5或8，其他位置的可以为0-9
         */
-        String telRegex = "[1][358]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
+        String telRegex = "[1][123456789]\\d{9}";//"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
         if (TextUtils.isEmpty(mobiles)) return false;
         else return mobiles.matches(telRegex);
     }

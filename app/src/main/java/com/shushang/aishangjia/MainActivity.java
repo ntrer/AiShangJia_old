@@ -327,6 +327,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         requestRunPermisssion(new String[]{Manifest.permission.CAMERA}, new PermissionListener() {
             @Override
             public void onGranted() {
+//                List<ActionCustomersBean> actionCustomersBeans = MyApplication.getDaoInstant().getActionCustomersBeanDao().loadAll();
+//                List<CustomersBean> customersBeans = MyApplication.getDaoInstant().getCustomersBeanDao().loadAll();
+
                 //表示所有权限都授权了
                 Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
                 openCameraIntent.putExtra("type", PreferencesUtils.getString(mContext,"roleType"));

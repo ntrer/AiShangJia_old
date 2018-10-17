@@ -27,8 +27,10 @@ import com.shushang.aishangjia.MainActivity;
 import com.shushang.aishangjia.MainActivity2;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.AppPeopleActivity;
+import com.shushang.aishangjia.activity.DailyOrderActivity;
 import com.shushang.aishangjia.activity.LoginActivity2;
 import com.shushang.aishangjia.activity.NewPeopleDetailActivity;
+import com.shushang.aishangjia.activity.ProActivityActivity2;
 import com.shushang.aishangjia.activity.SignActivity;
 import com.shushang.aishangjia.activity.XiansuoActivity;
 import com.shushang.aishangjia.base.BaseFragment;
@@ -70,8 +72,13 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
     private  List<NewPeople.DataListBean> data=new ArrayList<>();
     private static final int REQUEST_CODE_SIGN= 2003;
     private static final int REQUEST_CODE_ADD= 2004;
+    private static final int REQUEST_CODE_ACTIVITY = 2005;
+    private static final int REQUEST_CODE_DAILY = 2006;
+    private static final int REQUEST_CODE_XIANSUO = 2002;
+    private static final int REQUEST_CODE_NEW_PEOPLE =2662;
     private LocalDate time=null;
     private String token_id=null;
+    private String resourceName=null;
     private boolean isMounth=false;
     private View head=null;
     private MainActivity mMainActivity;
@@ -113,7 +120,28 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
                 .setPressedTranslationZ(10)
                 .setTag(2)
                 .build();
-        fabTop.addFab(collection, xiansuo,email);
+
+        FabAttributes email2 = new FabAttributes.Builder()
+                .setBackgroundTint(Color.parseColor("#2096F3"))
+                .setSrc(getResources().getDrawable(R.mipmap.money_activity))
+                .setFabSize(FloatingActionButton.SIZE_MINI)
+                .setPressedTranslationZ(10)
+                .setTag(4)
+                .build();
+
+        FabAttributes email3 = new FabAttributes.Builder()
+                .setBackgroundTint(Color.parseColor("#2096F3"))
+                .setSrc(getResources().getDrawable(R.mipmap.money_4_coloring))
+                .setFabSize(FloatingActionButton.SIZE_MINI)
+                .setPressedTranslationZ(10)
+                .setTag(5)
+                .build();
+        if(resourceName!=null&&resourceName.equals("1116")){
+            fabTop.addFab(collection,xiansuo,email,email2,email3);
+        }
+        else {
+            fabTop.addFab(collection,email,email2,email3);
+        }
         fabTop.setAnimationManager(new FabAlphaAnimate(fabTop));
         fabTop.setFabClickListener(this);
     }
@@ -143,12 +171,14 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
     public void initData() {
         super.initData();
         token_id= PreferencesUtils.getString(getActivity(),"token_id");
+        resourceName= PreferencesUtils.getString(mContext,"ResourceName");
     }
 
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        isMounth=false;
         getData(time,token_id);
     }
 
@@ -167,7 +197,7 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
                             try {
                                 NewPeople test = JSONUtil.fromJson(response, NewPeople.class);
                                 if(test.getRet().equals("101")){
-                                    Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, ""+test.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(mContext,"token_id",null);
                                     startActivity(new Intent(getActivity(), LoginActivity2.class));
                                     getActivity().finish();
@@ -190,6 +220,7 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
                             }
                             catch (Exception e){
 
+                                Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -197,12 +228,14 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
                 .failure(new IFailure() {
                     @Override
                     public void onFailure() {
+
                         mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
                     }
                 }).error(new IError() {
             @Override
             public void onError(int code, String msg) {
+
                 mSwipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(mContext, ""+msg, Toast.LENGTH_SHORT).show();
             }
@@ -228,7 +261,7 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
                 Intent intent=new Intent(mContext,NewPeopleDetailActivity.class);
                 NewPeople.DataListBean dataListBean = dataList.get(position);
                 intent.putExtra("data",dataListBean);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_NEW_PEOPLE);
             }
         });
         //重复执行动画
@@ -292,6 +325,28 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
             },1000);
             startActivityForResult(new Intent(getActivity(), XiansuoActivity.class),REQUEST_CODE_ADD);
         }
+        else if (tag.equals(4)){
+            mFabHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fabTop.closeAnimate();
+                }
+            },1000);
+            //表示所有权限都授权了
+            Intent openCameraIntent = new Intent(getActivity(), ProActivityActivity2.class);
+            openCameraIntent.putExtra("type", "3");
+            openCameraIntent.putExtra("event","6");
+            startActivityForResult(openCameraIntent, REQUEST_CODE_ACTIVITY);
+        }
+        else if (tag.equals(5)){
+            mFabHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fabTop.closeAnimate();
+                }
+            },1000);
+            startActivityForResult(new Intent(getActivity(), DailyOrderActivity.class),REQUEST_CODE_DAILY);
+        }
     }
 
     @Override
@@ -308,35 +363,61 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
         }
         page=page+1;
         String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=getCustomers&token_id="+token_id+"&page="+page+"&rows=10"+"&date="+time+"&type="+type;
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        if(response!=null) {
-                            Log.d("nnnnnnn",response);
-                            NewPeople test = JSONUtil.fromJson(response, NewPeople.class);
-                            if(test.getRet().equals("200")){
-                                if(page>test.getIntmaxPage()){
-                                    page=1;
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            if(response!=null) {
+                                Log.d("nnnnnnn",response);
+                                NewPeople test = JSONUtil.fromJson(response, NewPeople.class);
+                                if(test.getRet().equals("200")){
+                                    if(page>test.getIntmaxPage()){
+                                        page=1;
+                                        mScanAdapter.loadMoreComplete();
+                                        mScanAdapter.loadMoreEnd();
+                                    }
+                                    else if(test.getDataList().size()!=0){
+                                        List<NewPeople.DataListBean> dataList = test.getDataList();
+                                        LoadMoreData(dataList);
+                                        Log.d("33333333333",response);
+                                        mScanAdapter.loadMoreComplete();
+                                    }
+                                    else if(test.getDataList().size()==0){
+                                        mScanAdapter.loadMoreComplete();
+                                        mScanAdapter.loadMoreEnd();
+                                    }
+                                }
+                                else {
                                     mScanAdapter.loadMoreComplete();
                                     mScanAdapter.loadMoreEnd();
                                 }
-                                else {
-                                    List<NewPeople.DataListBean> dataList = test.getDataList();
-                                    LoadMoreData(dataList);
-                                    Log.d("33333333333",response);
-                                    mScanAdapter.loadMoreComplete();
-                                }
-                            }
-                            else {
-                                mScanAdapter.loadMoreComplete();
                             }
                         }
-                    }
-                })
-                .build()
-                .get();
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(getActivity(), "错误了", Toast.LENGTH_SHORT).show();
+                            mScanAdapter.loadMoreComplete();
+                            mScanAdapter.loadMoreEnd();
+                        }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            Toast.makeText(getActivity(), "错误了"+code+msg, Toast.LENGTH_SHORT).show();
+                            mScanAdapter.loadMoreComplete();
+                            mScanAdapter.loadMoreEnd();
+                        }
+                    })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+
+        }
 
     }
 
@@ -352,7 +433,6 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
                 mScanAdapter.addData(dataList);
                 mScanAdapter.loadMoreComplete();
             }
-            mScanAdapter.addData(dataList);
         }
     }
 
@@ -370,60 +450,66 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
     private void getMounthData(final LocalDate time, final String token_id) {
         String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=getCustomers&token_id="+token_id+"&page=1&rows=10"+"&date="+time+"&type=1";
         mSwipeRefreshLayout.setRefreshing(true);
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Log.d("wocaocacoa",response);
-                        if(response!=null){
-                            isClick=false;
-                            mSwipeRefreshLayout.setRefreshing(false);
-                            NewPeople signList = JSONUtil.fromJson(response, NewPeople.class);
-                            if(signList.getRet().equals("101")){
-                                Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
-                                PreferencesUtils.putString(mContext,"token_id",null);
-                                startActivity(new Intent(getActivity(), LoginActivity2.class));
-                                getActivity().finish();
-                            }
-                            else if(signList.getRet().equals("200")){
-                                if(signList.getDataList()!=null){
-                                    dataList = signList.getDataList();
-                                    getTabMounthData(time,token_id);
-                                    if(dataList.size()!=0){
-                                        showTabData(dataList);
-                                        ll_nodata.setVisibility(View.GONE);
-                                    }
-                                    else {
-                                        showTabData(dataList);
-                                        ll_nodata.setVisibility(View.VISIBLE);
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Log.d("wocaocacoa",response);
+                            if(response!=null){
+                                isClick=false;
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                NewPeople signList = JSONUtil.fromJson(response, NewPeople.class);
+                                if(signList.getRet().equals("101")){
+                                    Toast.makeText(mContext, ""+signList.getMsg(), Toast.LENGTH_SHORT).show();
+                                    PreferencesUtils.putString(mContext,"token_id",null);
+                                    startActivity(new Intent(getActivity(), LoginActivity2.class));
+                                    getActivity().finish();
+                                }
+                                else if(signList.getRet().equals("200")){
+                                    if(signList.getDataList()!=null){
+                                        dataList = signList.getDataList();
+                                        getTabMounthData(time,token_id);
+                                        if(dataList.size()!=0){
+                                            showTabData(dataList);
+                                            ll_nodata.setVisibility(View.GONE);
+                                        }
+                                        else {
+                                            showTabData(dataList);
+                                            ll_nodata.setVisibility(View.VISIBLE);
+                                        }
                                     }
                                 }
-                            }
-                            else if(signList.getRet().equals("201")){
-                                Toast.makeText(mContext, ""+signList.getMsg(), Toast.LENGTH_SHORT).show();
+                                else if(signList.getRet().equals("201")){
+                                    Toast.makeText(mContext, ""+signList.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
+
                             }
 
                         }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            ToastUtils.showLong(msg);
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
 
-                    }
-                })
-                .error(new IError() {
-                    @Override
-                    public void onError(int code, String msg) {
-                        ToastUtils.showLong(msg);
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build()
-                .get();
+        }
+
     }
 
 
@@ -446,94 +532,116 @@ public class ScanFragment extends BaseFragment implements View.OnClickListener, 
         }else if(requestCode==REQUEST_CODE_ADD){
             getData(time,token_id);
         }
+        else if(requestCode==REQUEST_CODE_ACTIVITY){
+            getData(time,token_id);
+        }
+        else if(requestCode==REQUEST_CODE_DAILY){
+            getData(time,token_id);
+        }
+        else if(requestCode==REQUEST_CODE_NEW_PEOPLE){
+            getData(time,token_id);
+        }
     }
+
+
 
 
     private void getTabData(final LocalDate time, String token_id){
         String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=getCustomerCount&token_id="+token_id+"&date="+time+"&type=0";
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Log.d("wocaocaocacoacoa",response);
-                        if(response!=null){
-                            ScanTabData scanTabData = JSONUtil.fromJson(response, ScanTabData.class);
-                            if(scanTabData.getRet().equals("200")){
-                                if(scanTabData.getData()!=null){
-                                    if(mTextView1.getText()==String.valueOf(scanTabData.getData().getCustomerNum())){
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Log.d("wocaocaocacoacoa",response);
+                            if(response!=null){
+                                ScanTabData scanTabData = JSONUtil.fromJson(response, ScanTabData.class);
+                                if(scanTabData.getRet().equals("200")){
+                                    if(scanTabData.getData()!=null){
+                                        if(mTextView1.getText()==String.valueOf(scanTabData.getData().getCustomerNum())){
 
-                                    }else {
-                                        mTextView1.setText(String.valueOf(scanTabData.getData().getCustomerNum()));
-                                        mTextView2.setText(String.valueOf(scanTabData.getData().getAcCustomerNum()));
-                                        mTextView3.setText(String.valueOf(Math.round(Float.parseFloat(scanTabData.getData().getAcRate())*100))+"%");
-                                        mTextView4.setText(String.valueOf(scanTabData.getData().getRefuseCustomer()));
+                                        }else {
+                                            mTextView1.setText(String.valueOf(scanTabData.getData().getCustomerNum()));
+                                            mTextView2.setText(String.valueOf(scanTabData.getData().getAcCustomerNum()));
+                                            mTextView3.setText(String.valueOf(Math.round(Float.parseFloat(scanTabData.getData().getAcRate())*100))+"%");
+                                            mTextView4.setText(String.valueOf(scanTabData.getData().getRefuseCustomer()));
+                                        }
                                     }
                                 }
-                            }
-                            else if(scanTabData.getRet().equals("201")){
-                                Toast.makeText(mContext, ""+scanTabData.getMsg(), Toast.LENGTH_SHORT).show();
+                                else if(scanTabData.getRet().equals("201")){
+                                    Toast.makeText(mContext, ""+scanTabData.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
-                    }
-                }).error(new IError() {
-            @Override
-            public void onError(int code, String msg) {
-                Toast.makeText(mContext, ""+msg, Toast.LENGTH_SHORT).show();
-            }
-        })
-                .build()
-                .get();
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                        }
+                    }).error(new IError() {
+                @Override
+                public void onError(int code, String msg) {
+                    Toast.makeText(mContext, ""+msg, Toast.LENGTH_SHORT).show();
+                }
+            })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+
+        }
+
     }
 
     private void getTabMounthData(LocalDate time,String token_id){
         String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=getCustomerCount&token_id="+token_id+"&date="+time+"&type=1";
-        RestClient.builder()
-                .url(url)
-                .success(new ISuccess() {
-                    @Override
-                    public void onSuccess(String response) {
-                        Log.d("wocaocaocacoacoa",response);
-                        if(response!=null){
-                            ScanTabData scanTabData = JSONUtil.fromJson(response, ScanTabData.class);
-                            if(scanTabData.getRet().equals("200")){
-                                if(scanTabData.getData()!=null){
-                                    if(mTextView1.getText()==String.valueOf(scanTabData.getData().getCustomerNum())){
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Log.d("wocaocaocacoacoa",response);
+                            if(response!=null){
+                                ScanTabData scanTabData = JSONUtil.fromJson(response, ScanTabData.class);
+                                if(scanTabData.getRet().equals("200")){
+                                    if(scanTabData.getData()!=null){
+                                        if(mTextView1.getText()==String.valueOf(scanTabData.getData().getCustomerNum())){
 
-                                    }else {
-                                        mTextView1.setText(String.valueOf(scanTabData.getData().getCustomerNum()));
-                                        mTextView2.setText(String.valueOf(scanTabData.getData().getAcCustomerNum()));
-                                        mTextView3.setText(String.valueOf(Math.round(Float.parseFloat(scanTabData.getData().getAcRate()))));
-                                        mTextView4.setText(String.valueOf(scanTabData.getData().getRefuseCustomer()));
+                                        }else {
+                                            mTextView1.setText(String.valueOf(scanTabData.getData().getCustomerNum()));
+                                            mTextView2.setText(String.valueOf(scanTabData.getData().getAcCustomerNum()));
+                                            mTextView3.setText(String.valueOf(Math.round(Float.parseFloat(scanTabData.getData().getAcRate())))+"%");
+                                            mTextView4.setText(String.valueOf(scanTabData.getData().getRefuseCustomer()));
+                                        }
                                     }
                                 }
+                                else if(scanTabData.getRet().equals("201")){
+                                    Toast.makeText(mContext, ""+scanTabData.getMsg(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                            else if(scanTabData.getRet().equals("201")){
-                                Toast.makeText(mContext, ""+scanTabData.getMsg(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
 
-                    }
-                })
-                .failure(new IFailure() {
-                    @Override
-                    public void onFailure() {
-                        Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
-                    }
-                }).error(new IError() {
-            @Override
-            public void onError(int code, String msg) {
-                Toast.makeText(mContext, ""+msg, Toast.LENGTH_SHORT).show();
-            }
-        })
-                .build()
-                .get();
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(mContext, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                        }
+                    }).error(new IError() {
+                @Override
+                public void onError(int code, String msg) {
+                    Toast.makeText(mContext, ""+msg, Toast.LENGTH_SHORT).show();
+                }
+            })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+
+        }
     }
 
     @Override

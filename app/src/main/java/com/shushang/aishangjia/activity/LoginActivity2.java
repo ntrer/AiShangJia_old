@@ -31,6 +31,7 @@ import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import static com.shushang.aishangjia.R.id.fab;
 
@@ -45,6 +46,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
     private FloatingActionButton mFab;
     private boolean isFirst;
     private Dialog mRequestDialog;
+    private  List<Login.DataBean.ResourcesBean> resources;
     //退出时的时间
     private long mExitTime;
     @Override
@@ -144,6 +146,17 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                                         PreferencesUtils.putString(mContext, "xingming",login.getData().getXingming());
                                         PreferencesUtils.putString(mContext, "shangjia_name",login.getData().getShangjia_name().toString());
                                         PreferencesUtils.putString(mContext, "type",login.getData().getType());
+                                        if(login.getData().getResources()!=null&&login.getData().getResources().size()!=0){
+                                            resources = login.getData().getResources();
+                                            for(int i=0;i<resources.size();i++){
+                                                if( resources.get(i).getResourceNum().equals("1116")){
+                                                    PreferencesUtils.putString(mContext, "ResourceName",resources.get(i).getResourceNum());
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            PreferencesUtils.putString(mContext, "ResourceName",null);
+                                        }
                                         isFirst = false;
                                         if(login.getData().getType().equals("3")){
                                             startActivity(new Intent(LoginActivity2.this,MainActivity2.class));

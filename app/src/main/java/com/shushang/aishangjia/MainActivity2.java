@@ -25,9 +25,13 @@ import com.shushang.aishangjia.Bean.UpDate;
 import com.shushang.aishangjia.base.BaseActivity;
 import com.shushang.aishangjia.base.BaseUrl;
 import com.shushang.aishangjia.base.PermissionListener;
+import com.shushang.aishangjia.fragment.CrmFragment.CrmFragment;
+import com.shushang.aishangjia.fragment.LianMengFragment.LianMengFragment;
 import com.shushang.aishangjia.fragment.MyFragment2.MyFragment2;
 import com.shushang.aishangjia.fragment.ScanFragment.ScanFragment;
+import com.shushang.aishangjia.fragment.ShopTopFragment.ShopTopFragment;
 import com.shushang.aishangjia.fragment.SignFragment.SignFragment;
+import com.shushang.aishangjia.fragment.YiXiangJinFragment.YiXiangJinFragment;
 import com.shushang.aishangjia.net.RestClient;
 import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.service.AppUpdateService;
@@ -35,7 +39,6 @@ import com.shushang.aishangjia.ui.BottomNavigationViewHelper;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
 import com.shushang.aishangjia.utils.Json.JSONUtil;
 import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.io.File;
 import java.util.List;
@@ -52,8 +55,10 @@ public class MainActivity2 extends BaseActivity{
     private MyFragment2 mMyFragment;
     private ScanFragment mScanFragment;
     private SignFragment mSignFragment;
-//    private ShopTopFragment mShopTopFragment;
-//    private CrmFragment mCrmFragment;
+    private LianMengFragment mLianMengFragment;
+    private ShopTopFragment mShopTopFragment;
+    private CrmFragment mCrmFragment;
+    private YiXiangJinFragment mYiXiangJinFragment;
     private int lastfragment;//用于记录上个选择的Fragment
     private BottomNavigationView navigation;
     private Fragment[] mFragments ;
@@ -73,6 +78,7 @@ public class MainActivity2 extends BaseActivity{
         initFragment();
         token_id= PreferencesUtils.getString(mContext,"token_id");
         inidData(token_id);
+        permissionCamera();
     }
 
     @Override
@@ -137,10 +143,13 @@ public class MainActivity2 extends BaseActivity{
     private void initFragment() {
         mMyFragment = new MyFragment2();
         mScanFragment=new ScanFragment();
-        mSignFragment=new SignFragment();
-//        mShopTopFragment=new ShopTopFragment();
-//        mCrmFragment=new CrmFragment();
-        mFragments = new Fragment[]{mSignFragment,mScanFragment, mMyFragment};
+        mSignFragment=new SignFragment();5
+        mShopTopFragment=new ShopTopFragment();
+        mCrmFragment=new CrmFragment();
+        mYiXiangJinFragment=new YiXiangJinFragment();
+        mLianMengFragment=new LianMengFragment();
+        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mLianMengFragment,mMyFragment};
+//        mFragments = new Fragment[]{mShopTopFragment,mSignFragment,mScanFragment, mYiXiangJinFragment,mMyFragment};
         lastfragment = 0;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mSignFragment,"tag1").show(mSignFragment).commit();
         navigation = (BottomNavigationView) findViewById(R.id.navigation_fragment);
@@ -183,28 +192,28 @@ public class MainActivity2 extends BaseActivity{
 
                         return true;
                     }
-//                    case R.id.navigation_fragment_three:
-//                    {
-//                        if(lastfragment!=3)
-//                        {
-//                            switchFragment(lastfragment,3);
-//                            lastfragment=3;
-//
-//                        }
-//
-//                        return true;
-//                    }
-//                    case R.id.navigation_fragment_four:
-//                    {
-//                        if(lastfragment!=4)
-//                        {
-//                            switchFragment(lastfragment,4);
-//                            lastfragment=4;
-//
-//                        }
-//
-//                        return true;
-//                    }
+                    case R.id.navigation_fragment_three:
+                    {
+                        if(lastfragment!=3)
+                        {
+                            switchFragment(lastfragment,3);
+                            lastfragment=3;
+
+                        }
+
+                        return true;
+                    }
+                    case R.id.navigation_fragment_four:
+                    {
+                        if(lastfragment!=4)
+                        {
+                            switchFragment(lastfragment,4);
+                            lastfragment=4;
+
+                        }
+
+                        return true;
+                    }
 
                 }
                 return false;
@@ -293,10 +302,7 @@ public class MainActivity2 extends BaseActivity{
         requestRunPermisssion(new String[]{Manifest.permission.CAMERA}, new PermissionListener() {
             @Override
             public void onGranted() {
-                //表示所有权限都授权了
-                Intent openCameraIntent = new Intent(MainActivity2.this, CaptureActivity.class);
-                openCameraIntent.putExtra("type", "2");
-                startActivityForResult(openCameraIntent, REQUEST_CODE_SCAN );
+
             }
 
             @Override
@@ -355,7 +361,6 @@ public class MainActivity2 extends BaseActivity{
     protected void onDestroy() {
         super.onDestroy();
     }
-
 
 }
 

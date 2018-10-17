@@ -7,14 +7,40 @@
         android:title="签到统计" />
 
     <item
-        android:id="@+id/navigation_fragment_one"
-        android:icon="@drawable/bottom_tab1_select"
-        android:title="新客统计" />
+    android:id="@+id/navigation_fragment_one"
+    android:icon="@drawable/bottom_tab1_select"
+    android:title="新客统计" />
 
     <item
-        android:id="@+id/navigation_fragment_two"
-        android:icon="@drawable/bottom_tab2_select"
-        android:title="我的" />
+    android:id="@+id/navigation_fragment_two"
+    android:icon="@drawable/bottom_tab2_select"
+    android:title="订金" />
+
+    <item
+        android:id="@+id/navigation_fragment_three"
+        android:icon="@drawable/bottom_tab3_select"
+        android:title="联盟" />
+
+    <item
+    android:id="@+id/navigation_fragment_four"
+    android:icon="@drawable/bottom_tab2_select"
+    android:title="我的" />
+
+<!--<item-->
+        <!--android:id="@+id/navigation_fragment_zero"-->
+        <!--android:icon="@drawable/bottom_tab1_select"-->
+        <!--android:title="CRM" />-->
+
+
+    <!--<item-->
+    <!--android:id="@+id/navigation_fragment_one"-->
+    <!--android:icon="@drawable/bottom_tab2_select"-->
+    <!--android:title="订金" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/navigation_fragment_two"-->
+        <!--android:icon="@drawable/bottom_tab2_select"-->
+        <!--android:title="销售管理" />-->
     <!--<item-->
         <!--android:id="@+id/navigation_fragment_three"-->
         <!--android:icon="@drawable/bottom_tab2_select"-->

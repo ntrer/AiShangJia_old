@@ -129,7 +129,7 @@ public class MoneyDataRefreshHandler implements SwipeRefreshLayout.OnRefreshList
                                         mTextView3.setText(String.valueOf(Math.round(data.getTotalMoney())) + "");
                                         mTextView4.setText(String.valueOf(Math.round(data.getAverageMoney())));
                                         mTextView5.setText(data.getRefundOrders()+ "");
-                                        mTextView6.setText(String.valueOf(data.getRefundMoney()) + "");
+                                        mTextView6.setText(String.valueOf(Math.round(data.getRefundMoney())) + "");
                                         mLoading.setVisibility(View.GONE);
                                     }
                                 }
@@ -189,7 +189,7 @@ public class MoneyDataRefreshHandler implements SwipeRefreshLayout.OnRefreshList
                                     }
                                 }
                                 else if(moneyPeople.getRet().equals("101")){
-                                    Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, ""+moneyPeople.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(mContext,"token_id",null);
                                     startActivity(new Intent(mMainActivity, LoginActivity2.class));
                                     mMainActivity.finish();
@@ -199,7 +199,8 @@ public class MoneyDataRefreshHandler implements SwipeRefreshLayout.OnRefreshList
                                 }
                             }
                             catch (Exception e){
-
+                                ll_nodata.setVisibility(View.VISIBLE);
+                                Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -320,6 +321,14 @@ public class MoneyDataRefreshHandler implements SwipeRefreshLayout.OnRefreshList
                                         LoadMoreData(data);
                                         mMoneyPeopleRecyclerViewAdapter.loadMoreComplete();
                                     }
+                                    else if(moneyPeople.getDataList().size()==0){
+                                        mMoneyPeopleRecyclerViewAdapter.loadMoreComplete();
+                                        mMoneyPeopleRecyclerViewAdapter.loadMoreEnd();
+                                    }
+                                }
+                                else {
+                                    mMoneyPeopleRecyclerViewAdapter.loadMoreComplete();
+                                    mMoneyPeopleRecyclerViewAdapter.loadMoreEnd();
                                 }
                             }
                             catch (Exception e){
@@ -335,7 +344,14 @@ public class MoneyDataRefreshHandler implements SwipeRefreshLayout.OnRefreshList
     }
 
     private void LoadMoreData(List<MoneyPeople.DataListBean> data) {
-        mMoneyPeopleRecyclerViewAdapter.addData(data);
+        if(data.size()!=0){
+            mMoneyPeopleRecyclerViewAdapter.addData(data);
+            mMoneyPeopleRecyclerViewAdapter.loadMoreComplete();
+        }
+        else {
+            mMoneyPeopleRecyclerViewAdapter.loadMoreComplete();
+            mMoneyPeopleRecyclerViewAdapter.loadMoreEnd();
+        }
     }
 
 

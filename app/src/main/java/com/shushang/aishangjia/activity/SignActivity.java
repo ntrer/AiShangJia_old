@@ -12,7 +12,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -27,14 +26,16 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.blankj.utilcode.util.ToastUtils;
-import com.shushang.aishangjia.MainActivity2;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.base.BaseActivity;
 import com.shushang.aishangjia.base.BaseUrl;
+import com.shushang.aishangjia.base.MessageEvent;
 import com.shushang.aishangjia.base.PermissionListener;
 import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.mylibrary.FileProvider7;
 import com.xys.libzxing.zxing.utils.PreferencesUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -87,6 +88,7 @@ public class SignActivity extends BaseActivity {
     private File imgFile;
     private Dialog mRequestDialog;
     private Bitmap newBitmap;
+    private Button reFreshButton;
     @Override
     public void init() {
         mImageView = (ImageView) findViewById(R.id.img);
@@ -94,6 +96,7 @@ public class SignActivity extends BaseActivity {
         mTextView2 = (TextView) findViewById(R.id.sign_address);
         mTextView3 = (TextView) findViewById(R.id.sign_map);
         mButton = (Button) findViewById(R.id.submit);
+        reFreshButton=findViewById(R.id.refresh);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mRequestDialog = ExtAlertDialog.creatRequestDialog(this, getString(R.string.submit));
         token_id = PreferencesUtils.getString(this, "token_id");
@@ -114,6 +117,17 @@ public class SignActivity extends BaseActivity {
                     submit(sign_time, sign_address, sign_map, isBm);
                 }
                 Log.d("isBm", sign_time + sign_address + sign_map);
+            }
+        });
+        reFreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    mLocationClient.startLocation();
+                }
+                catch (Exception e){
+                    ToastUtils.showLong(e.toString());
+                }
             }
         });
         mImageView.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +202,21 @@ public class SignActivity extends BaseActivity {
         public void onLocationChanged(AMapLocation aMapLocation) {
             if (aMapLocation != null) {
                 if (aMapLocation.getErrorCode() == 0) {
-                    mTextView3.setText(aMapLocation.getAddress());
+//                    mTextView3.setText(aMapLocation.getAddress());
+                    Log.d("aMapLocation",aMapLocation.getProvince()+"====="+aMapLocation.getCity()+"===="+aMapLocation.getDistrict()+"===="+aMapLocation.getStreet()+"==="+aMapLocation.getDescription());
+                    if(aMapLocation.getProvince()==null){
+                        mTextView3.setText(aMapLocation.getCity()+aMapLocation.getDistrict()+aMapLocation.getStreet()+aMapLocation.getDescription());
+                    }
+                    else if(aMapLocation.getCity()==null){
+                        mTextView3.setText(aMapLocation.getDistrict()+aMapLocation.getStreet()+aMapLocation.getDescription());
+                    }
+                    else if(aMapLocation.getDistrict()==null||aMapLocation.getStreet()==null||aMapLocation.getDescription()==null){
+                        ToastUtils.showLong("定位失败，请重新定位");
+                    }
+                    else {
+                        mTextView3.setText(aMapLocation.getProvince()+aMapLocation.getCity()+aMapLocation.getDistrict()+aMapLocation.getStreet()+aMapLocation.getDescription());
+                    }
+
                 } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                     Log.e("AmapError", "location Error, ErrCode:"
@@ -242,7 +270,7 @@ public class SignActivity extends BaseActivity {
 //            imgFile=getFile(newBitmap);
             imgFile= new File(Environment.getExternalStorageDirectory(), filename);
             mCurrentPhotoPath = imgFile.getAbsolutePath();
-            fileUri = FileProvider7.getUriForFile(this, imgFile);
+            fileUri = FileProvider7.getUriForFile(getApplicationContext(), imgFile);
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PHOTO);
         }
@@ -253,10 +281,20 @@ public class SignActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE_TAKE_PHOTO) {
-            mBitmap = getSmallBitmap(mCurrentPhotoPath);
-            int bitmapDegree = getBitmapDegree(mCurrentPhotoPath);
-            newBitmap= rotateBitmapByDegree(mBitmap, bitmapDegree);
-            mImageView.setImageBitmap(newBitmap);
+            try {
+                mBitmap = getSmallBitmap(mCurrentPhotoPath);
+                int bitmapDegree = getBitmapDegree(mCurrentPhotoPath);
+                newBitmap= rotateBitmapByDegree(mBitmap, bitmapDegree);
+                if(newBitmap==null){
+                    ToastUtils.showLong("获取图片失败");
+                }
+                else {
+                    mImageView.setImageBitmap(newBitmap);
+                }
+            }
+            catch (Exception e){
+                ToastUtils.showLong(""+e);
+            }
         }
 
     }
@@ -394,12 +432,12 @@ public class SignActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     Log.d("上传",response+"");
+                    EventBus.getDefault().post(new MessageEvent("陌拜签到"));
 //                if(response1.getRet().equals("200")){
                     if(mRequestDialog!=null&&mRequestDialog.isShowing()){
                         mRequestDialog.dismiss();
                     }
-                    startActivity(new Intent(SignActivity.this, MainActivity2.class));
-                    ActivityCompat.finishAfterTransition(SignActivity.this);
+                   finish();
 //                }else {
 //                    if(mRequestDialog!=null&&mRequestDialog.isShowing()){
 //                        mRequestDialog.dismiss();
@@ -501,15 +539,21 @@ public class SignActivity extends BaseActivity {
      * @return 旋转后的图片
      */
     public static Bitmap rotateBitmapByDegree(Bitmap bitmap, int degree) {
-        // 根据旋转角度，生成旋转矩阵
-        Matrix matrix = new Matrix();
-        matrix.postRotate(degree);
-        // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
-        Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        if(bitmap!=null){
+            // 根据旋转角度，生成旋转矩阵
+            Matrix matrix = new Matrix();
+            matrix.postRotate(degree);
+            // 将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            Bitmap newBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 //        if (bitmap != null & !bitmap.isRecycled()) {
 //            bitmap.recycle();
 //        }
-        return newBitmap;
+            return newBitmap;
+        }
+        else {
+            return null;
+        }
+
     }
 
     private File getFile(Bitmap bitmap){

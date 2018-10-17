@@ -3,12 +3,15 @@ package com.shushang.aishangjia.application;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.blankj.utilcode.util.Utils;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.joanzapata.iconify.fonts.IoniconsModule;
 import com.shushang.AppContext;
+import com.shushang.aishangjia.greendao.DaoMaster;
+import com.shushang.aishangjia.greendao.DaoSession;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.commonsdk.UMConfigure;
@@ -25,24 +28,41 @@ import cn.finalteam.okhttpfinal.OkHttpFinalConfiguration;
 public class MyApplication extends Application {
     private static MyApplication myApplication=null;
     private Set<Activity> allActivities;
+    private static DaoSession daoSession;
     private int	mScreenWidth, mScreenHeight;// 屏幕尺寸
     @Override
     public void onCreate() {
         super.onCreate();
         myApplication=this;
         initOKHttp();
+        setUpDataBase();
         //工具类初始化
         Utils.init(myApplication);
         AppContext.getInstance().init(myApplication);
 //        CrashReport.initCrashReport(getApplicationContext(), "a0626d9293", false);
         Beta.autoCheckUpgrade=true;
+        //公网
         Bugly.init(getApplicationContext(), "a0626d9293", false);
-//        Bugly.init(getApplicationContext(), "c6b9892dfa", false);
+
+        //测试
+//        Bugly.init(getApplicationContext(), "22095be631", false);
+
         //字体图标初始化
         Iconify
                 .with(new FontAwesomeModule())
                 .with(new IoniconsModule());
         UMConfigure.init(this, "5b685121f43e483ac200041d", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
+    }
+
+    private void setUpDataBase() {
+        DaoMaster.DevOpenHelper helper=new DaoMaster.DevOpenHelper(this,"dsx.db",null);
+        SQLiteDatabase db=helper.getWritableDatabase();
+        DaoMaster daoMaster=new DaoMaster(db);
+        daoSession=daoMaster.newSession();
+    }
+
+    public static DaoSession getDaoInstant(){
+        return daoSession;
     }
 
     public static MyApplication getInstance(){

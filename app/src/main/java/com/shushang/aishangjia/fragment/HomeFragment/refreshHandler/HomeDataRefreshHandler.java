@@ -178,17 +178,19 @@ public class HomeDataRefreshHandler implements SwipeRefreshLayout.OnRefreshListe
                                     }
                                 }
                                 else if(signProple.getRet().equals("101")){
-                                    Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, ""+signProple.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(mContext,"token_id",null);
                                     startActivity(new Intent(mMainActivity, LoginActivity2.class));
                                     mMainActivity.finish();
                                 }
                                 else if(signProple.getRet().equals("201")){
+                                    ll_nodata.setVisibility(View.GONE);
                                     Toast.makeText(mContext, ""+signProple.getMsg(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                             catch (Exception e){
-
+                                ll_nodata.setVisibility(View.VISIBLE);
+                                Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -304,9 +306,14 @@ public class HomeDataRefreshHandler implements SwipeRefreshLayout.OnRefreshListe
                                         LoadMoreData(data);
                                         mSignPeopleRecyclerViewAdapter.loadMoreComplete();
                                     }
+                                    else if(signProple.getDataList().size()==0){
+                                        mSignPeopleRecyclerViewAdapter.loadMoreComplete();
+                                        mSignPeopleRecyclerViewAdapter.loadMoreEnd();
+                                    }
                                 }
                                 else {
                                     mSignPeopleRecyclerViewAdapter.loadMoreComplete();
+                                    mSignPeopleRecyclerViewAdapter.loadMoreEnd();
                                 }
                             }
                             catch (Exception e){

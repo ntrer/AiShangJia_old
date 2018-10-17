@@ -32,6 +32,7 @@ import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.LoginActivity2;
 import com.shushang.aishangjia.base.BaseFragment;
 import com.shushang.aishangjia.base.BaseUrl;
+import com.shushang.aishangjia.base.MessageEvent;
 import com.shushang.aishangjia.fragment.HomeFragment.adapter.TabRecyclerViewAdapter;
 import com.shushang.aishangjia.fragment.HomeFragment.adapter.TabRecyclerViewAdapter2;
 import com.shushang.aishangjia.fragment.MoneyFragment.refreshHandler.MoneyDataRefreshHandler;
@@ -41,6 +42,10 @@ import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.utils.Json.JSONUtil;
 import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
 import com.umeng.analytics.MobclickAgent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -144,6 +149,9 @@ public class MoneyFragment extends BaseFragment {
                 popupLayout.show();//默认从底部弹出
             }
         });
+
+        EventBus.getDefault().register(this);
+
     }
 
     private void initDataRecyclerView() {
@@ -181,7 +189,7 @@ public class MoneyFragment extends BaseFragment {
                             try {
                                 TabList tabList = JSONUtil.fromJson(response, TabList.class);
                                 if(tabList.getRet().equals("101")){
-                                    Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, ""+tabList.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(mContext,"token_id",null);
                                     startActivity(new Intent(getActivity(), LoginActivity2.class));
                                     getActivity().finish();
@@ -310,11 +318,20 @@ public class MoneyFragment extends BaseFragment {
         MobclickAgent.onPageEnd("MoneyFragment");
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEvent messageEvent) {
+        getData();
+    }
+
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         if(popupLayout!=null){
             popupLayout.dismiss();
+        }
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 

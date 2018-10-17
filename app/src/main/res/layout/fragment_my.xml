@@ -309,10 +309,19 @@
                         />
 
                     <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="v.1.0.4"
+                            android:layout_marginEnd="@dimen/dp_10"
+                            />
 
                         <ImageView
                             android:layout_width="wrap_content"

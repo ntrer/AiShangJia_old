@@ -172,7 +172,7 @@ public class GiftPaperRefreshHandler implements SwipeRefreshLayout.OnRefreshList
 
                                 }
                                 else if(moneyPeople.getRet().equals("101")){
-                                    Toast.makeText(mContext, "token失效了", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, ""+moneyPeople.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(mContext,"token_id",null);
                                     startActivity(new Intent(mMainActivity, LoginActivity2.class));
                                     mMainActivity.finish();
@@ -182,7 +182,8 @@ public class GiftPaperRefreshHandler implements SwipeRefreshLayout.OnRefreshList
                                 }
                             }
                             catch (Exception e){
-
+                                ll_nodata.setVisibility(View.VISIBLE);
+                                Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -295,9 +296,14 @@ public class GiftPaperRefreshHandler implements SwipeRefreshLayout.OnRefreshList
                                         LoadMoreData(data);
                                         mGiftPaperRecyclerViewAdapter.loadMoreComplete();
                                     }
+                                    else if(moneyPeople.getDataList().size()==0){
+                                        mGiftPaperRecyclerViewAdapter.loadMoreComplete();
+                                        mGiftPaperRecyclerViewAdapter.loadMoreEnd();
+                                    }
                                 }
                                 else {
                                     mGiftPaperRecyclerViewAdapter.loadMoreComplete();
+                                    mGiftPaperRecyclerViewAdapter.loadMoreEnd();
                                 }
                             }
                             catch (Exception e){
