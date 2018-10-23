@@ -1,6 +1,9 @@
 package com.shushang.aishangjia.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,21 +17,34 @@ import android.widget.Toast;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.shushang.aishangjia.Bean.ActionCustomersBean;
+import com.shushang.aishangjia.Bean.ActivityBean;
 import com.shushang.aishangjia.Bean.ActivityList;
+import com.shushang.aishangjia.Bean.CustomersBean;
+import com.shushang.aishangjia.Bean.UserData;
 import com.shushang.aishangjia.MainActivity;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.adapter.ActivityListAdapter;
+import com.shushang.aishangjia.application.MyApplication;
 import com.shushang.aishangjia.base.BaseActivity;
 import com.shushang.aishangjia.base.BaseUrl;
+import com.shushang.aishangjia.greendao.ActionCustomersBeanDao;
+import com.shushang.aishangjia.greendao.ActivityBeanDao;
+import com.shushang.aishangjia.greendao.CustomersBeanDao;
+import com.shushang.aishangjia.greendao.DaoMaster;
+import com.shushang.aishangjia.greendao.DaoSession;
 import com.shushang.aishangjia.net.RestClient;
 import com.shushang.aishangjia.net.callback.IError;
 import com.shushang.aishangjia.net.callback.IFailure;
 import com.shushang.aishangjia.net.callback.ISuccess;
+import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
 import com.xys.libzxing.zxing.utils.JSONUtil;
 import com.xys.libzxing.zxing.utils.PreferencesUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ActivityListActivity extends BaseActivity {
@@ -43,6 +59,15 @@ public class ActivityListActivity extends BaseActivity {
     //退出时的时间
     private long mExitTime;
     private ProgressBar mProgressBar;
+    private Dialog mRequestDialog;
+    private  List<ActionCustomersBean> actionCustomers=new ArrayList<>();
+    private List<CustomersBean> customers=new ArrayList<>();
+    private ActivityBean mActivityBean;
+    private ActionCustomersBeanDao actionCustomersBeanDao;
+    private CustomersBeanDao customersBeanDao;
+    private ActivityBeanDao activityBeanDao;
+    private static DaoSession daoSession;
+
     @Override
     public int setLayout() {
         return R.layout.activity_list;
@@ -54,6 +79,8 @@ public class ActivityListActivity extends BaseActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_activity);
         ll_nodata= (LinearLayout) findViewById(R.id.ll_no_data);
         mProgressBar=findViewById(R.id.loading);
+        mRequestDialog = ExtAlertDialog.creatRequestDialog(ActivityListActivity.this, getString(R.string.getDataBase));
+        mRequestDialog.setCancelable(false);
         token_id = PreferencesUtils.getString(this, "token_id");
         mButton= (Button) findViewById(R.id.btn_quit);
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +106,7 @@ public class ActivityListActivity extends BaseActivity {
 
     private void initData() {
         mProgressBar.setVisibility(View.VISIBLE);
+        setUpDataBase();
         String url = BaseUrl.BASE_URL+"phoneApi/activityController.do?method=getActivitys&token_id=" + token_id;
         Log.d("BaseUrl", url);
         try {
@@ -160,8 +188,13 @@ public class ActivityListActivity extends BaseActivity {
                 PreferencesUtils.putString(ActivityListActivity.this,"activityId",activityId);
                 Log.d("wocaoyd",activityId+"");
                 PreferencesUtils.putString(ActivityListActivity.this,"roleType",roleType);
-                startActivity(new Intent(ActivityListActivity.this, MainActivity.class));
-               finish();
+                mRequestDialog.show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getUserData();
+                    }
+                },1000);
             }
         });
     }
@@ -188,6 +221,142 @@ public class ActivityListActivity extends BaseActivity {
             System.exit(0);
         }
     }
+
+
+    private void setUpDataBase() {
+        DaoMaster.DevOpenHelper helper=new DaoMaster.DevOpenHelper(ActivityListActivity.this,"dsx.db",null);
+        SQLiteDatabase db=helper.getWritableDatabase();
+        DaoMaster daoMaster=new DaoMaster(db);
+        daoSession=daoMaster.newSession();
+        actionCustomersBeanDao = daoSession.getActionCustomersBeanDao();
+        customersBeanDao =daoSession.getCustomersBeanDao();
+        activityBeanDao=daoSession.getActivityBeanDao();
+    }
+
+    private void getUserData() {
+        String token_id= PreferencesUtils.getString(ActivityListActivity.this,"token_id");
+        String activity_id= PreferencesUtils.getString(ActivityListActivity.this,"activityId");
+        String url= BaseUrl.BASE_URL+"phoneApi/outLineController.do?method=downloadData&token_id="+token_id+"&activityId="+activity_id+"&time=";
+        Log.d("userDaata",url);
+        try {
+            RestClient.builder()
+                    .url(url)
+                    .success(new ISuccess() {
+                        @Override
+                        public void onSuccess(String response) {
+                            try {
+                                if(response!=null){
+                                    try {
+                                        UserData userData = com.shushang.aishangjia.utils.Json.JSONUtil.fromJson(response, UserData.class);
+                                        if (userData.getRet().equals("101")) {
+                                            Toast.makeText(ActivityListActivity.this, ""+userData.getMsg(), Toast.LENGTH_SHORT).show();
+                                            com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils.putString(ActivityListActivity.this, "token_id", null);
+                                            startActivity(new Intent(ActivityListActivity.this, LoginActivity2.class));
+                                            finish();
+                                        } else {
+                                            if (userData.getRet().equals("200")) {
+                                                Log.d("用户数据",response);
+                                                actionCustomers = userData.getData().getActionCustomers();
+                                                customers = userData.getData().getCustomers();
+                                                mActivityBean=userData.getData().getActivity();
+                                                insertInToDataBase(actionCustomers,customers,mActivityBean);
+                                            }
+                                            else if(userData.getRet().equals("201")){
+                                                Toast.makeText(ActivityListActivity.this, ""+userData.getMsg(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+                                    catch (Exception e){
+                                        if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                            mRequestDialog.dismiss();
+                                        }
+                                        ToastUtils.showLong(""+e);
+
+                                    }
+                                }
+                            }
+                            catch (Exception e){
+                                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                    mRequestDialog.dismiss();
+                                }
+                                ToastUtils.showLong(""+e);
+
+                            }
+
+                        }
+                    })
+                    .failure(new IFailure() {
+                        @Override
+                        public void onFailure() {
+                            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                mRequestDialog.dismiss();
+                            }
+                        }
+                    })
+                    .error(new IError() {
+                        @Override
+                        public void onError(int code, String msg) {
+                            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                mRequestDialog.dismiss();
+                            }
+                        }
+                    })
+                    .build()
+                    .get();
+        }
+        catch (Exception e){
+            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                mRequestDialog.dismiss();
+            }
+            ToastUtils.showLong(""+e);
+        }
+
+    }
+
+    private void insertInToDataBase(List<ActionCustomersBean> actionCustomers, List<CustomersBean> customers, ActivityBean activityBean) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            PreferencesUtils.putString(ActivityListActivity.this,"dataSync",df.format(new Date())+"");
+            actionCustomersBeanDao = MyApplication.getDaoInstant().getActionCustomersBeanDao();
+            customersBeanDao = MyApplication.getDaoInstant().getCustomersBeanDao();
+            activityBeanDao = MyApplication.getDaoInstant().getActivityBeanDao();
+            activityBeanDao.insert(activityBean);
+            actionCustomersBeanDao.deleteAll();
+            customersBeanDao.deleteAll();
+            activityBeanDao.deleteAll();
+            activityBeanDao.insert(activityBean);
+            if(actionCustomers !=null&& actionCustomers.size()>0) {
+                for (int i = 0; i< actionCustomers.size(); i++){
+                    ActionCustomersBean actionCustomersBean = actionCustomers.get(i);
+                    actionCustomersBeanDao.insert(actionCustomersBean);
+                }
+            }
+
+
+            if(customers !=null&& customers.size()>0) {
+                for (int i = 0; i< customers.size(); i++){
+                    CustomersBean customersBean = customers.get(i);
+                    customersBeanDao.insert(customersBean);
+                }
+            }
+
+            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                mRequestDialog.dismiss();
+            }
+
+            startActivity(new Intent(ActivityListActivity.this, MainActivity.class));
+            finish();
+        }
+        catch (Exception e){
+            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                mRequestDialog.dismiss();
+            }
+            ToastUtils.showLong(e.toString());
+            Log.d("数据库错误",e.toString());
+        }
+
+    }
+
 
 
 }

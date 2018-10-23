@@ -26,15 +26,6 @@
             android:textStyle="bold"
             />
 
-        <ImageView
-            android:id="@+id/shaixuan"
-            android:layout_width="@dimen/dp_28"
-            android:layout_height="@dimen/dp_28"
-            android:background="@mipmap/shaixuan"
-            android:layout_marginRight="@dimen/dp_10"
-            android:layout_gravity="right"
-            />
-
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
@@ -86,14 +77,5 @@
 
     </LinearLayout>
 
-    <com.shushang.aishangjia.ui.MyFab.SuspensionFab
-        android:id="@+id/fab_top"
-        android:layout_width="@dimen/dp_45"
-        android:layout_height="@dimen/dp_45"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/dp_10"
-        a_zhon:fab_orientation="top"
-        a_zhon:fab_spacing="@dimen/dp_10" />
 
 </RelativeLayout>

@@ -349,7 +349,7 @@ public class SignFragment extends BaseFragment implements View.OnClickListener, 
                     .get();
         }
         catch (Exception e){
-
+            Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -379,7 +379,7 @@ public class SignFragment extends BaseFragment implements View.OnClickListener, 
                                 }
                             }
                             catch (Exception e){
-
+                                Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -398,7 +398,7 @@ public class SignFragment extends BaseFragment implements View.OnClickListener, 
                     .get();
         }
         catch (Exception e){
-
+            Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -469,7 +469,7 @@ public class SignFragment extends BaseFragment implements View.OnClickListener, 
                                 }
                             }
                             catch (Exception e){
-
+                                Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                             }
                         }
                     })
@@ -493,7 +493,7 @@ public class SignFragment extends BaseFragment implements View.OnClickListener, 
                     .get();
         }
         catch (Exception e){
-
+            Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -577,7 +577,7 @@ public class SignFragment extends BaseFragment implements View.OnClickListener, 
                                     }
                                 }
                                 catch (Exception e){
-
+                                    Toast.makeText(mContext, ""+e, Toast.LENGTH_SHORT).show();
                                 }
                             }
 

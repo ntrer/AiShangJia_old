@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.XianSuoChiActivity;
+import com.shushang.aishangjia.application.MyApplication;
 import com.shushang.aishangjia.base.BaseFragment;
 
 import butterknife.BindView;
@@ -28,6 +29,7 @@ import butterknife.Unbinder;
  */
 
 public class ShopTopFragment extends BaseFragment {
+
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -49,10 +51,12 @@ public class ShopTopFragment extends BaseFragment {
     RecyclerView mRvSign;
     @BindView(R.id.srl_home)
     SwipeRefreshLayout mSrlHome;
+    private View mView;
     Unbinder unbinder;
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+        mView = View.inflate(MyApplication.getInstance().getApplicationContext(), R.layout.headerview7, null);
 
     }
 
@@ -71,9 +75,14 @@ public class ShopTopFragment extends BaseFragment {
     }
 
 
-    @OnClick(R.id.ll_xiansuo) void go(){
-       startActivity(new Intent(getActivity(), XianSuoChiActivity.class));
+
+
+    @OnClick(R.id.ll_xiansuo)
+    void go() {
+        startActivity(new Intent(getActivity(), XianSuoChiActivity.class));
     }
+
+
 
 
 

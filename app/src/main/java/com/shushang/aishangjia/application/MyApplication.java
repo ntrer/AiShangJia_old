@@ -47,6 +47,10 @@ public class MyApplication extends Application {
         //测试
 //        Bugly.init(getApplicationContext(), "22095be631", false);
 
+//        热更新
+//        Bugly.init(getApplicationContext(), "2065c1323c", true);
+
+
         //字体图标初始化
         Iconify
                 .with(new FontAwesomeModule())

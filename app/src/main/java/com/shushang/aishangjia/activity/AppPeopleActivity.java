@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -466,11 +467,36 @@ public class AppPeopleActivity extends BaseActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-               finish();
+                ExtAlertDialog.showSureDlg(AppPeopleActivity.this, "提醒", "确定退出拓客界面吗?", "确定", new ExtAlertDialog.IExtDlgClick() {
+                    @Override
+                    public void Oclick(int result) {
+                        if(result==1){
+                            finish();
+                        }
+                    }
+                });
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //对返回键进行监听
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        ExtAlertDialog.showSureDlg(AppPeopleActivity.this, "提醒", "确定退出拓客界面吗?", "确定", new ExtAlertDialog.IExtDlgClick() {
+            @Override
+            public void Oclick(int result) {
+                if(result==1){
+                    finish();
+                }
+            }
+        });
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

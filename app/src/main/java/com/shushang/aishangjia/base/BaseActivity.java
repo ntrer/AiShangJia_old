@@ -11,7 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.noober.background.BackgroundLibrary;
 import com.shushang.aishangjia.R;
+import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
+import com.shushang.aishangjia.utils.permissionUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private long mExitTime;
     private PermissionListener mListener;
     private static final int PERMISSION_REQUESTCODE = 100;
+    private static final int REQUEST_PERMISSION_SETTING = 600;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,8 +81,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                     for(int i = 0; i < grantResults.length; i++){
                         int grantResult = grantResults[i];
                         String permission = permissions[i];
-                        if(grantResult != PackageManager.PERMISSION_GRANTED){
-                            deniedPermissions.add(permission);
+                        if(grantResult==PackageManager.PERMISSION_DENIED){
+                            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                                    permissions[i])){
+                                reGetPermission();
+                            }
+                            else {
+                                deniedPermissions.add(permission);
+                            }
+
                         }
                     }
                     if(deniedPermissions.isEmpty()){
@@ -114,5 +124,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityStackManager.getActivityStackManager().popActivity(this);
     }
 
+    private void reGetPermission() {
+        ExtAlertDialog.showSureDlg(this, "警告", "权限被拒绝，部分功能将无法使用，请重新授予权限", "确定", new ExtAlertDialog.IExtDlgClick() {
+            @Override
+            public void Oclick(int result) {
+                if(result==1){
+                    permissionUtil.GoToSetting(BaseActivity.this);
+                    finish();
+                }
+            }
+        });
+    }
 
 }

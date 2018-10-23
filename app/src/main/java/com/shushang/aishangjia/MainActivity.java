@@ -37,9 +37,11 @@ import com.shushang.aishangjia.net.callback.IError;
 import com.shushang.aishangjia.net.callback.IFailure;
 import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.service.AppUpdateService;
+import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
 import com.shushang.aishangjia.utils.Json.JSONUtil;
 import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
+import com.shushang.aishangjia.utils.permissionUtil;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.io.File;
@@ -340,7 +342,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for(String permission : deniedPermission){
-                    Toast.makeText(MainActivity.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+                    reGetPermission();
                 }
             }
         });
@@ -357,7 +359,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for(String permission : deniedPermission){
-                    Toast.makeText(MainActivity.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+                     reGetPermission();
+                }
+            }
+        });
+    }
+
+    private void reGetPermission() {
+        ExtAlertDialog.showSureDlg(MainActivity.this, "警告", "权限被拒绝，部分功能将无法使用，请重新授予权限", "确定", new ExtAlertDialog.IExtDlgClick() {
+            @Override
+            public void Oclick(int result) {
+                if(result==1){
+                    permissionUtil.GoToSetting(MainActivity.this);
+                    finish();
                 }
             }
         });
@@ -396,6 +410,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(this);
     }
+
+
+
 
 }
 

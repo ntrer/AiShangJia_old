@@ -10,6 +10,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.USE_SIP"/>
+
     <!-- 用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- 用于访问GPS定位 -->
@@ -150,8 +157,7 @@
             android:name=".activity.NewPeopleDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar2"
-            android:windowSoftInputMode="adjustResize"
-            >
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity
             android:name=".activity.ProgressActivity"
@@ -202,10 +208,27 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar2">
         </activity>
-        <activity android:name=".activity.NoOnLineActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/AppTheme.NoActionBar2"
-            >
+        <activity
+            android:name=".activity.NoOnLineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.LianMengActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.GongGaoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.ZhangDanActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity android:name=".activity.JiZhangActivity">
         </activity>
     </application>
 

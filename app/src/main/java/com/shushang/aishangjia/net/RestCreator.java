@@ -44,7 +44,7 @@ public final class RestCreator {
      * 构建OkHttp
      */
     private static final class OKHttpHolder {
-        private static final int TIME_OUT = 10;
+        private static final int TIME_OUT = 5;
         private static final OkHttpClient OK_HTTP_CLIENT=new OkHttpClient.Builder()
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .build();

@@ -67,7 +67,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -163,7 +165,6 @@ public class HomeFragment extends BaseFragment {
         mToolbar.setTitle("");
         mTextView=rootView.findViewById(R.id.mounth);
         mLoading=rootView.findViewById(R.id.loading);
-        sync_time=PreferencesUtils.getString(getActivity(),"dataSync");
         mLiXian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,6 +172,7 @@ public class HomeFragment extends BaseFragment {
                     @Override
                     public void Oclick(int result) {
                         if(result==1){
+                            sync_time=PreferencesUtils.getString(getActivity(),"dataSync");
                             mRequestDialog.show();
                             new Handler().postDelayed(new Runnable() {
                                 @Override
@@ -361,6 +363,8 @@ public class HomeFragment extends BaseFragment {
 
     private void insertInToDataBase(List<ActionCustomersBean> actionCustomers, List<CustomersBean> customers, ActivityBean activityBean) {
         try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+            PreferencesUtils.putString(getActivity(),"dataSync",df.format(new Date())+"");
             actionCustomersBeanDao = MyApplication.getDaoInstant().getActionCustomersBeanDao();
             customersBeanDao = MyApplication.getDaoInstant().getCustomersBeanDao();
             activityBeanDao = MyApplication.getDaoInstant().getActivityBeanDao();

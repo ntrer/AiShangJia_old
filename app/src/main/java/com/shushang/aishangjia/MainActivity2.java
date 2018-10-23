@@ -25,6 +25,7 @@ import com.shushang.aishangjia.Bean.UpDate;
 import com.shushang.aishangjia.base.BaseActivity;
 import com.shushang.aishangjia.base.BaseUrl;
 import com.shushang.aishangjia.base.PermissionListener;
+import com.shushang.aishangjia.fragment.AppFragment.AppFragment;
 import com.shushang.aishangjia.fragment.CrmFragment.CrmFragment;
 import com.shushang.aishangjia.fragment.LianMengFragment.LianMengFragment;
 import com.shushang.aishangjia.fragment.MyFragment2.MyFragment2;
@@ -36,9 +37,11 @@ import com.shushang.aishangjia.net.RestClient;
 import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.service.AppUpdateService;
 import com.shushang.aishangjia.ui.BottomNavigationViewHelper;
+import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
 import com.shushang.aishangjia.utils.Json.JSONUtil;
 import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
+import com.shushang.aishangjia.utils.permissionUtil;
 
 import java.io.File;
 import java.util.List;
@@ -59,6 +62,7 @@ public class MainActivity2 extends BaseActivity{
     private ShopTopFragment mShopTopFragment;
     private CrmFragment mCrmFragment;
     private YiXiangJinFragment mYiXiangJinFragment;
+    private AppFragment mAppFragment;
     private int lastfragment;//用于记录上个选择的Fragment
     private BottomNavigationView navigation;
     private Fragment[] mFragments ;
@@ -143,13 +147,15 @@ public class MainActivity2 extends BaseActivity{
     private void initFragment() {
         mMyFragment = new MyFragment2();
         mScanFragment=new ScanFragment();
-        mSignFragment=new SignFragment();5
+        mSignFragment=new SignFragment();
         mShopTopFragment=new ShopTopFragment();
         mCrmFragment=new CrmFragment();
         mYiXiangJinFragment=new YiXiangJinFragment();
         mLianMengFragment=new LianMengFragment();
-        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mLianMengFragment,mMyFragment};
+        mAppFragment=new AppFragment();
+        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mAppFragment,mMyFragment};
 //        mFragments = new Fragment[]{mShopTopFragment,mSignFragment,mScanFragment, mYiXiangJinFragment,mMyFragment};
+//        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mMyFragment};
         lastfragment = 0;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mSignFragment,"tag1").show(mSignFragment).commit();
         navigation = (BottomNavigationView) findViewById(R.id.navigation_fragment);
@@ -200,7 +206,6 @@ public class MainActivity2 extends BaseActivity{
                             lastfragment=3;
 
                         }
-
                         return true;
                     }
                     case R.id.navigation_fragment_four:
@@ -308,11 +313,14 @@ public class MainActivity2 extends BaseActivity{
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for(String permission : deniedPermission){
-                    Toast.makeText(MainActivity2.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+                    reGetPermission();
                 }
             }
         });
     }
+
+
+
     //请求存储权限
     private void permissionStorage(){
         requestRunPermisssion(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
@@ -325,11 +333,26 @@ public class MainActivity2 extends BaseActivity{
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for(String permission : deniedPermission){
-                    Toast.makeText(MainActivity2.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+                    reGetPermission();
                 }
             }
         });
     }
+
+
+    private void reGetPermission() {
+        ExtAlertDialog.showSureDlg(MainActivity2.this, "警告", "权限被拒绝，部分功能将无法使用，请重新授予权限", "确定", new ExtAlertDialog.IExtDlgClick() {
+            @Override
+            public void Oclick(int result) {
+                if(result==1){
+                    permissionUtil.GoToSetting(MainActivity2.this);
+                    finish();
+                }
+            }
+        });
+    }
+
+
 
     //对返回键进行监听
     @Override

@@ -299,66 +299,78 @@ public class NewPeopleDetailActivity extends AppCompatActivity {
             paramsMap.put("activityName", activityName);
         }
 
-        OkhttpUtil.okHttpPost(url, paramsMap, new CallBackUtil.CallBackString() {
-            @Override
-            public void onFailure(Call call, Exception e) {
-                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
-                    mRequestDialog.dismiss();
-                }
-                ToastUtils.showLong(e.toString());
-
-            }
-
-            @Override
-            public void onResponse(String response) {
-                Log.d("修改信息",response);
-                if(response!=null){
-                    try {
-                        Response response1 = JSONUtil.fromJson(response, Response.class);
-                        if(response1.getRet().equals("200")){
-                            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
-                                mRequestDialog.dismiss();
-                            }
-                            ToastUtils.showLong("修改成功");
-                            mTvDecorateProgress.setEnabled(false);
-                            mEtDecorateStyle.setEnabled(false);
-                            mEtDecorateStyle.clearFocus();
-                            mEtDecorateAddress.setEnabled(false);
-                            mEtXiaoQu.setEnabled(false);
-                            mEtXiaoQu.clearFocus();
-                            mTvIntentionToPurchaseProduct.setEnabled(false);
-                            mTvIntentionToPurchaseProduct.clearFocus();
-                        }
-                        else if(response1.getRet().equals("201")){
-
-                            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
-                                mRequestDialog.dismiss();
-                            }
-                            Toast.makeText(NewPeopleDetailActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
-                        }
-                        else if (response1.getRet().equals("101")) {
-
-                            Toast.makeText(NewPeopleDetailActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
-                            PreferencesUtils.putString(NewPeopleDetailActivity.this, "token_id", null);
-                            startActivity(new Intent(NewPeopleDetailActivity.this, LoginActivity2.class));
-                            finish();
-                        }
-                        else {
-
-                            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
-                                mRequestDialog.dismiss();
-                            }
-                            Toast.makeText(NewPeopleDetailActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
-                        }
+        try {
+            OkhttpUtil.okHttpPost(url, paramsMap, new CallBackUtil.CallBackString() {
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                        mRequestDialog.dismiss();
                     }
-                    catch (Exception e){
-                        ToastUtils.showLong(e.toString());
-                    }
+                    ToastUtils.showLong(e.toString());
 
                 }
 
+                @Override
+                public void onResponse(String response) {
+                    Log.d("修改信息",response);
+                    if(response!=null){
+                        try {
+                            Response response1 = JSONUtil.fromJson(response, Response.class);
+                            if(response1.getRet().equals("200")){
+                                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                    mRequestDialog.dismiss();
+                                }
+                                ToastUtils.showLong("修改成功");
+                                mTvDecorateProgress.setEnabled(false);
+                                mEtDecorateStyle.setEnabled(false);
+                                mEtDecorateStyle.clearFocus();
+                                mEtDecorateAddress.setEnabled(false);
+                                mEtXiaoQu.setEnabled(false);
+                                mEtXiaoQu.clearFocus();
+                                mTvIntentionToPurchaseProduct.setEnabled(false);
+                                mTvIntentionToPurchaseProduct.clearFocus();
+                            }
+                            else if(response1.getRet().equals("201")){
+
+                                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                    mRequestDialog.dismiss();
+                                }
+                                Toast.makeText(NewPeopleDetailActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
+                            else if (response1.getRet().equals("101")) {
+
+                                Toast.makeText(NewPeopleDetailActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
+                                PreferencesUtils.putString(NewPeopleDetailActivity.this, "token_id", null);
+                                startActivity(new Intent(NewPeopleDetailActivity.this, LoginActivity2.class));
+                                finish();
+                            }
+                            else {
+
+                                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                    mRequestDialog.dismiss();
+                                }
+                                Toast.makeText(NewPeopleDetailActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        catch (Exception e){
+                            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                mRequestDialog.dismiss();
+                            }
+                            ToastUtils.showLong(e.toString());
+                        }
+
+                    }
+
+                }
+            });
+        }
+        catch (Exception e){
+            if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                mRequestDialog.dismiss();
             }
-        });
+            ToastUtils.showLong("服务器出错，请稍后再试");
+        }
+
 
 
     }

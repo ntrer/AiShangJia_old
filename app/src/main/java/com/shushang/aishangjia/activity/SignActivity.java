@@ -32,6 +32,7 @@ import com.shushang.aishangjia.base.BaseUrl;
 import com.shushang.aishangjia.base.MessageEvent;
 import com.shushang.aishangjia.base.PermissionListener;
 import com.shushang.aishangjia.ui.ExtAlertDialog;
+import com.shushang.aishangjia.utils.permissionUtil;
 import com.shushang.mylibrary.FileProvider7;
 import com.xys.libzxing.zxing.utils.PreferencesUtils;
 
@@ -123,7 +124,7 @@ public class SignActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    mLocationClient.startLocation();
+                    permissionLocation();
                 }
                 catch (Exception e){
                     ToastUtils.showLong(e.toString());
@@ -238,7 +239,7 @@ public class SignActivity extends BaseActivity {
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for (String permission : deniedPermission) {
-                    Toast.makeText(SignActivity.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+//                    reGetPermission();
                 }
             }
         });
@@ -255,7 +256,20 @@ public class SignActivity extends BaseActivity {
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for (String permission : deniedPermission) {
-                    Toast.makeText(SignActivity.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+//                    reGetPermission();
+                }
+            }
+        });
+    }
+
+
+    private void reGetPermission() {
+        ExtAlertDialog.showSureDlg(SignActivity.this, "警告", "权限被拒绝，部分功能将无法使用，请重新授予权限", "确定", new ExtAlertDialog.IExtDlgClick() {
+            @Override
+            public void Oclick(int result) {
+                if(result==1){
+                    permissionUtil.GoToSetting(SignActivity.this);
+                    finish();
                 }
             }
         });
@@ -474,9 +488,7 @@ public class SignActivity extends BaseActivity {
             e.printStackTrace();
 
         }
-
         return urlEncode;
-
     }
 
     @Override

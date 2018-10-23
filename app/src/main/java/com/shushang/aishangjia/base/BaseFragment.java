@@ -24,8 +24,8 @@ public abstract class BaseFragment extends Fragment {
     protected boolean isLoad = false;
     public Context mContext;
     private View rootView;
-    private PermissionListener mListener;
     private static final int PERMISSION_REQUESTCODE = 100;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

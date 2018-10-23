@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +26,7 @@ import com.shushang.aishangjia.Bean.UserData;
 import com.shushang.aishangjia.Bean.info;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.adapter.NoOnLineSignAdapter;
+import com.shushang.aishangjia.application.MyApplication;
 import com.shushang.aishangjia.base.BaseActivity;
 import com.shushang.aishangjia.base.BaseUrl;
 import com.shushang.aishangjia.base.MessageEvent;
@@ -79,6 +81,7 @@ public class NoOnLineActivity extends BaseActivity {
     private String infos;
     private ActivityBeanDao activityBeanDao;
     private ActivityBean mActivityBean;
+    private TextView mTextView1, mTextView2, mTextView3, mTextView4, mTextView5;
     @Override
     public int setLayout() {
         return R.layout.activity_no_on_line;
@@ -132,14 +135,27 @@ public class NoOnLineActivity extends BaseActivity {
             @Override
             public void onDenied(List<String> deniedPermission) {
                 for(String permission : deniedPermission){
-                    Toast.makeText(NoOnLineActivity.this, "被拒绝的权限：" + permission, Toast.LENGTH_SHORT).show();
+                    reGetPermission();
                 }
             }
         });
     }
 
 
-
+    private void reGetPermission() {
+        ExtAlertDialog.showSureDlg(NoOnLineActivity.this, "警告", "权限被拒绝，部分功能将无法使用，请重新授予权限", "确定", new ExtAlertDialog.IExtDlgClick() {
+            @Override
+            public void Oclick(int result) {
+                if(result==1){
+                    Intent intent = new Intent();
+                    intent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    intent.setData(Uri.fromParts("package", getPackageName(), null));
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+    }
 
 
     private void SyncData() {
@@ -287,7 +303,14 @@ public class NoOnLineActivity extends BaseActivity {
     }
 
     private void showData(List<ActionCustomersBean> actionCustomersBeans) {
+        mView=View.inflate(MyApplication.getInstance().getApplicationContext(), R.layout.headerview6,null);
+        mTextView1=mView.findViewById(R.id.num1);
+        mTextView2=mView.findViewById(R.id.num2);
+        mTextView3=mView.findViewById(R.id.num3);
+        mTextView4=mView.findViewById(R.id.num4);
+        mTextView5=mView.findViewById(R.id.num5);
         mNoOnLineSignAdapter = new NoOnLineSignAdapter(R.layout.item_sign,actionCustomersBeans);
+        mNoOnLineSignAdapter.addHeaderView(mView);
         mNoOnLineSignAdapter.isFirstOnly(false);
         mRecyclerView.setAdapter(mNoOnLineSignAdapter);
         mRecyclerView.scrollToPosition(0);
@@ -321,6 +344,7 @@ public class NoOnLineActivity extends BaseActivity {
                            }
                        }
                         actionCustomers.addAll(actionCustomers2);
+                        llnodata.setVisibility(View.GONE);
                         showData(actionCustomers);
                         getUpdateInfo(actionCustomersBeans);
                     }
@@ -352,7 +376,7 @@ public class NoOnLineActivity extends BaseActivity {
                 Log.d("Updateinfos",infos+"");
             }
             catch (Exception e){
-
+                 ToastUtils.showLong("操作失败，请重试");
             }
         }
 

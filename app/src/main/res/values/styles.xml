@@ -89,6 +89,19 @@
         <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
+
+    <!--日常客户新建、活动客户新建-->
+    <style name="activity_customer_create_tv_style3" parent="@android:style/Widget">
+        <item name="android:layout_width">@dimen/dp_100</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/dp_5</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:textColor">#1A1A1A</item>
+    </style>
+
+
+
     <style name="activity_customer_create_et_style" parent="@android:style/Widget">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
