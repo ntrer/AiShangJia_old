@@ -42,6 +42,7 @@
 
 
                 <RelativeLayout
+                    android:background="@color/white"
                     android:id="@+id/activity"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
@@ -81,6 +82,7 @@
 
                 <!--姓名-->
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
 
@@ -118,6 +120,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                 <!--手机号-->
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
                     <LinearLayout
@@ -156,6 +159,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
 
                 <RelativeLayout
+                    android:background="@color/white"
                     android:id="@+id/yzm"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
@@ -210,6 +214,7 @@
 
                 <!--性别-->
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
 
@@ -244,6 +249,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                  <!--地址-->
                 <LinearLayout
+                    android:background="@color/white"
                     android:id="@+id/ll_customer_address"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48"
@@ -265,6 +271,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                 <!--小区名称-->
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
 
@@ -304,6 +311,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                  <!--装修进度-->
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
 
@@ -340,6 +348,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                  <!--装修风格-->
                 <LinearLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -372,6 +381,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                  <!--意向产品-->
                 <RelativeLayout
+                    android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">
 
@@ -409,6 +419,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
 
                 <RelativeLayout
+                    android:background="@color/white"
                     android:id="@+id/cardNum"
                     android:layout_width="match_parent"
                     android:visibility="gone"

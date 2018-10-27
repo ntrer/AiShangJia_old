@@ -490,10 +490,11 @@ public class NoOnLineActivity extends BaseActivity {
                 }
             }
             if(customers !=null&& customers.size()>0) {
-                for (int i = 0; i< customers.size(); i++){
-                    CustomersBean customersBean = customers.get(i);
-                    customersBeanDao.insert(customersBean);
-                }
+                customersBeanDao.insertInTx(customers);
+//                for (int i = 0; i< customers.size(); i++){
+//                    CustomersBean customersBean = customers.get(i);
+//                    customersBeanDao.insert(customersBean);
+//                }
             }
 
             if(mRequestDialog!=null&&mRequestDialog.isShowing()){
@@ -532,10 +533,11 @@ public class NoOnLineActivity extends BaseActivity {
                 }
             }
             if(customers !=null&& customers.size()>0) {
-                for (int i = 0; i< customers.size(); i++){
-                    CustomersBean customersBean = customers.get(i);
-                    customersBeanDao.insert(customersBean);
-                }
+                customersBeanDao.insertInTx(customers);
+//                for (int i = 0; i< customers.size(); i++){
+//                    CustomersBean customersBean = customers.get(i);
+//                    customersBeanDao.insert(customersBean);
+//                }
             }
 
             if(mRequestDialog!=null&&mRequestDialog.isShowing()){

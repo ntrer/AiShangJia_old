@@ -153,9 +153,9 @@ public class MainActivity2 extends BaseActivity{
         mYiXiangJinFragment=new YiXiangJinFragment();
         mLianMengFragment=new LianMengFragment();
         mAppFragment=new AppFragment();
-        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mAppFragment,mMyFragment};
+//        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mAppFragment,mMyFragment};
 //        mFragments = new Fragment[]{mShopTopFragment,mSignFragment,mScanFragment, mYiXiangJinFragment,mMyFragment};
-//        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mMyFragment};
+        mFragments = new Fragment[]{mSignFragment,mScanFragment, mYiXiangJinFragment,mMyFragment};
         lastfragment = 0;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mSignFragment,"tag1").show(mSignFragment).commit();
         navigation = (BottomNavigationView) findViewById(R.id.navigation_fragment);
@@ -198,22 +198,22 @@ public class MainActivity2 extends BaseActivity{
 
                         return true;
                     }
-                    case R.id.navigation_fragment_three:
+//                    case R.id.navigation_fragment_three:
+//                    {
+//                        if(lastfragment!=3)
+//                        {
+//                            switchFragment(lastfragment,3);
+//                            lastfragment=3;
+//
+//                        }
+//                        return true;
+//                    }
+                    case R.id.navigation_fragment_four:
                     {
                         if(lastfragment!=3)
                         {
                             switchFragment(lastfragment,3);
                             lastfragment=3;
-
-                        }
-                        return true;
-                    }
-                    case R.id.navigation_fragment_four:
-                    {
-                        if(lastfragment!=4)
-                        {
-                            switchFragment(lastfragment,4);
-                            lastfragment=4;
 
                         }
 

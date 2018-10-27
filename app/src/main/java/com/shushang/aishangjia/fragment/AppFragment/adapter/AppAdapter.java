@@ -16,6 +16,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.MyViewHolder> {
 
     private List<MenuItem> list;
     private OnItemClickListener itemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
     public AppAdapter(List<MenuItem> list) {
         this.list = list;
     }
@@ -51,6 +52,16 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.MyViewHolder> {
                     itemClickListener.onItemClick(holder.name.getText().toString(),position);
             }
         });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if(mOnItemLongClickListener!=null){
+                    mOnItemLongClickListener.onItemLongClick();
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -68,7 +79,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.MyViewHolder> {
         this.itemClickListener = itemClickListener;
     }
 
-
+    //点击事件接口
+    public interface OnItemLongClickListener{
+        void onItemLongClick();
+    }
+    //设置点击事件的方法
+    public void setOnItemLongClickListener(OnItemLongClickListener LongitemClickListener){
+        this.mOnItemLongClickListener = LongitemClickListener;
+    }
 
 }
 

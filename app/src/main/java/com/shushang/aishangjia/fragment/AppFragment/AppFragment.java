@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,21 +17,27 @@ import com.shushang.aishangjia.Bean.MenuItem;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.AppPeopleActivity;
 import com.shushang.aishangjia.activity.DailyOrderActivity;
+import com.shushang.aishangjia.activity.GongGaoActivity;
+import com.shushang.aishangjia.activity.JiZhangActivity;
 import com.shushang.aishangjia.activity.LianMengActivity;
 import com.shushang.aishangjia.activity.ProActivityActivity2;
 import com.shushang.aishangjia.activity.SignActivity;
 import com.shushang.aishangjia.activity.XiansuoActivity;
 import com.shushang.aishangjia.activity.ZhangDanActivity;
+import com.shushang.aishangjia.application.MyApplication;
 import com.shushang.aishangjia.base.BaseFragment;
 import com.shushang.aishangjia.fragment.AppFragment.adapter.AppAdapter;
 import com.shushang.aishangjia.ui.MyFab.FabAlphaAnimate;
 import com.shushang.aishangjia.ui.MyFab.FabAttributes;
 import com.shushang.aishangjia.ui.MyFab.OnFabClickListener;
 import com.shushang.aishangjia.ui.MyFab.SuspensionFab;
+import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.content.Context.VIBRATOR_SERVICE;
 
 
 public class AppFragment extends BaseFragment implements OnFabClickListener {
@@ -49,12 +56,18 @@ public class AppFragment extends BaseFragment implements OnFabClickListener {
     private RecyclerView mRecyclerView;
     private AppAdapter adapter;
     private List<MenuItem> list;
-
+    private Vibrator vibrator;
+    private String type=null;
+    private String lianmengtype= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "type");
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
         mRecyclerView=rootView.findViewById(R.id.rv_app);
         mToolbar=rootView.findViewById(R.id.toolbar);
         fabTop= rootView.findViewById(R.id.fab_top);
+        type=PreferencesUtils.getString(getActivity(), "type");
+        if(type.equals("7")){
+            fabTop.setVisibility(View.GONE);
+        }
         FabAttributes collection = new FabAttributes.Builder()
                 .setBackgroundTint(Color.parseColor("#2096F3"))
                 .setSrc(getResources().getDrawable(R.mipmap.note))
@@ -102,7 +115,7 @@ public class AppFragment extends BaseFragment implements OnFabClickListener {
         }
         fabTop.setAnimationManager(new FabAlphaAnimate(fabTop));
         fabTop.setFabClickListener(this);
-
+        vibrator = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),4));
         adapter=new AppAdapter(list);
         mRecyclerView.setAdapter(adapter);
@@ -142,18 +155,25 @@ public class AppFragment extends BaseFragment implements OnFabClickListener {
         adapter.setItemClickListener(new AppAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String name, int position) {
-               if(name.equals("财务")){
+               if(name.equals("联盟财务")){
                    startActivity(new Intent(getActivity(),ZhangDanActivity.class));
                }
-               else if(name.equals("公告")){
-                   startActivity(new Intent(getActivity(),LianMengActivity.class));
+               else if(name.equals("联盟公告")){
+                   startActivity(new Intent(getActivity(),GongGaoActivity.class));
                }
-               else if(name.equals("联盟")){
+               else if(name.equals("联盟用户")){
                  startActivity(new Intent(getActivity(),LianMengActivity.class));
                }
-               else if(name.equals("记账")){
-                   startActivity(new Intent(getActivity(),LianMengActivity.class));
+               else if(name.equals("联盟记账")){
+                   startActivity(new Intent(getActivity(),JiZhangActivity.class));
                }
+            }
+        });
+
+        adapter.setOnItemLongClickListener(new AppAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick() {
+                vibrator.vibrate(300);
             }
         });
     }
@@ -169,10 +189,13 @@ public class AppFragment extends BaseFragment implements OnFabClickListener {
     public void initData() {
         super.initData();
         list = new ArrayList<>();
-        list.add(new MenuItem("财务", R.mipmap.caiwu));
-        list.add(new MenuItem("公告", R.mipmap.gonggao));
-        list.add(new MenuItem("联盟", R.mipmap.lianmeng));
-        list.add(new MenuItem("记账", R.mipmap.caiwu));
+        list.add(new MenuItem("联盟财务", R.mipmap.caiwu));
+        list.add(new MenuItem("联盟公告", R.mipmap.gonggao));
+        list.add(new MenuItem("联盟用户", R.mipmap.lianmeng));
+        if(lianmengtype!=null&&lianmengtype.equals("7")){
+            list.add(new MenuItem("联盟记账", R.mipmap.caiwu));
+        }
+
     }
 
     @Override
@@ -221,5 +244,12 @@ public class AppFragment extends BaseFragment implements OnFabClickListener {
             },1000);
             startActivityForResult(new Intent(getActivity(), DailyOrderActivity.class),REQUEST_CODE_DAILY);
         }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        vibrator.cancel();
     }
 }

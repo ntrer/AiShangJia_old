@@ -54,7 +54,7 @@
             android:id="@+id/label"
             android:layout_width="@dimen/dp_150"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_16"
+            android:textSize="@dimen/sp_14"
             android:maxEms="12"
             android:layout_below="@id/people"
             android:layout_alignParentLeft="true"

@@ -91,5 +91,8 @@
     <string name="message">此模式下，你将先从服务器同步数据库到本地，然后在本地进行签到</string>
     <string name="getDataBase">同步数据库中...</string>
     <string name="edit">姓名，卡号，手机号，性别无法修改</string>
+    <string name="fill_money">请输入金额(元)</string>
+    <string name="fill_beizhu">请填写备注(限14字)</string>
+    <string name="getData">请求中...</string>
 </resources>
 

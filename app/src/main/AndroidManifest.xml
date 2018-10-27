@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     <uses-permission android:name="android.permission.USE_SIP"/>
-
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <!-- 用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- 用于访问GPS定位 -->
@@ -228,7 +228,38 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar2">
         </activity>
-        <activity android:name=".activity.JiZhangActivity">
+        <activity
+            android:name=".activity.JiZhangActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity
+            android:name=".activity.NewPeopleDetailActivity2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.MoneyInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity
+            android:name=".activity.PhotoViewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar4">
+        </activity>
+        <activity
+            android:name=".activity.GongGaoDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar2">
+        </activity>
+        <activity android:name=".activity.ProvePeopleActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar2"
+            >
+        </activity>
+        <activity android:name=".MainActivity3">
         </activity>
     </application>
 

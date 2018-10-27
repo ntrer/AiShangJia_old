@@ -28,6 +28,7 @@ import com.shushang.aishangjia.Bean.TabList;
 import com.shushang.aishangjia.MainActivity;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.LoginActivity2;
+import com.shushang.aishangjia.application.MyApplication;
 import com.shushang.aishangjia.base.BaseFragment;
 import com.shushang.aishangjia.base.BaseUrl;
 import com.shushang.aishangjia.fragment.GiftPaperFragment.refreshHandler.GiftPaperRefreshHandler;
@@ -38,6 +39,7 @@ import com.shushang.aishangjia.net.callback.IFailure;
 import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.utils.Json.JSONUtil;
 import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.util.List;
 
@@ -46,7 +48,7 @@ import java.util.List;
  */
 
 public class GiftPaperFragment extends BaseFragment {
-
+    private static final int REQUEST_CODE_SCAN = 2002;
     private RecyclerView mRecyclerView,mGiftPaperRecyclerView,mRecyclerView2;
     private Toolbar mToolbar;
 //    private FrameLayout mFrameLayout;
@@ -64,6 +66,8 @@ public class GiftPaperFragment extends BaseFragment {
     private MainActivity mMainActivity;
     private PopupLayout popupLayout;
     private View mView;
+    private LinearLayout mLinearLayout;
+    private String  lianmengtype= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "type");
     private boolean useRadius=true;//是否使用圆角特性
     public Handler mHandler=new Handler(new Handler.Callback() {
         @Override
@@ -84,6 +88,7 @@ public class GiftPaperFragment extends BaseFragment {
         mView=View.inflate(getActivity(),R.layout.tablist,null);
         mRecyclerView2=mView.findViewById(R.id.rv_sign2);
         tabTextView=mView.findViewById(R.id.quit_item);
+        mLinearLayout=rootView.findViewById(R.id.scan_code);
         mToolbar=rootView.findViewById(R.id.toolbar);
         mTextView=rootView.findViewById(R.id.mounth);
         llnodata=rootView.findViewById(R.id.ll_no_data);
@@ -95,6 +100,22 @@ public class GiftPaperFragment extends BaseFragment {
 //        mFrameLayout=rootView.findViewById(R.id.boom);
         mLoading=rootView.findViewById(R.id.loading);
         mToolbar.setTitle("");
+        if(lianmengtype==null||lianmengtype.equals("")){
+            mLinearLayout.setVisibility(View.GONE);
+        }
+        else {
+            mLinearLayout.setVisibility(View.VISIBLE);
+        }
+        mLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //表示所有权限都授权了
+                Intent openCameraIntent = new Intent(getActivity(), CaptureActivity.class);
+                openCameraIntent.putExtra("type", PreferencesUtils.getString(mContext,"roleType"));
+//                openCameraIntent.putExtra("type", "1");
+                startActivityForResult(openCameraIntent, REQUEST_CODE_SCAN );
+            }
+        });
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -285,6 +306,14 @@ public class GiftPaperFragment extends BaseFragment {
         super.onDestroy();
         if(popupLayout!=null){
             popupLayout.dismiss();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_SCAN){
+            getData();
         }
     }
 

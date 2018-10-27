@@ -728,7 +728,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                     if (userInfo.getRet().equals("200")) {
                                         if (userInfo.getData() != null) {
                                             mProgressBar.setVisibility(View.GONE);
-                                            Toast.makeText(CaptureActivity.this, userInfo.getData().getUser_name() + "签到成功", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(CaptureActivity.this, userInfo.getData().getUser_name()+"--"+userInfo.getData().getUser_phone()+":"+ "签到成功", Toast.LENGTH_SHORT).show();
                                         } else {
                                             mProgressBar.setVisibility(View.GONE);
                                             Toast.makeText(CaptureActivity.this, "签到失败", Toast.LENGTH_SHORT).show();
@@ -741,7 +741,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                         }, 1000);
                                     } else {
                                         mProgressBar.setVisibility(View.GONE);
-                                        Toast.makeText(CaptureActivity.this, userInfo.getMsg() + "", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CaptureActivity.this,  userInfo.getMsg(), Toast.LENGTH_SHORT).show();
                                         scanHandler.postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
@@ -889,7 +889,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                     ActionCustomersBeanDao.Properties.ActivityId.eq(activityBeanDao.loadAll().get(0).getActivityId())).unique();
                             if(unique!=null){
                                 if(unique.getQdsucess().equals("1")){
-                                    Toast.makeText(this, "已签到", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, unique.getCustomerName()+":"+"已签到", Toast.LENGTH_SHORT).show();
                                     isExit=true;
                                 }
                                 else {
@@ -928,7 +928,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                for (int i=0;i<actionCustomersBeans.size();i++){
                    if(rawResult.getText().equals(actionCustomersBeans.get(i).getCardNum())){
                        if(actionCustomersBeans.get(i).getQdsucess().equals("1")){
-                           Toast.makeText(this, "已签到", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(this, actionCustomersBeans.get(i).getCustomerName()+":"+"已签到", Toast.LENGTH_SHORT).show();
                            isExit=true;
                            mProgressBar.setVisibility(View.GONE);
                            scanHandler.postDelayed(new Runnable() {
@@ -947,7 +947,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                unique.setQdsj(date.getTime());
                                unique.setIsSign("1");
                                actionCustomersBeanDao.update(unique);
-                               Toast.makeText(this, actionCustomersBeans.get(i).getCustomerName()+"签到成功", Toast.LENGTH_SHORT).show();
+                               Toast.makeText(this, actionCustomersBeans.get(i).getCustomerName()+"--"+actionCustomersBeans.get(i).getCustomerMobile()+":"+"签到成功", Toast.LENGTH_SHORT).show();
                                isExit=true;
                                mProgressBar.setVisibility(View.GONE);
                                scanHandler.postDelayed(new Runnable() {
@@ -1203,10 +1203,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         }
 
         if (customers != null && customers.size() > 0) {
-            for (int i = 0; i < customers.size(); i++) {
-                CustomersBean customersBean = customers.get(i);
-                customersBeanDao.insert(customersBean);
-            }
+            customersBeanDao.insertInTx(customers);
+//            for (int i = 0; i < customers.size(); i++) {
+//                CustomersBean customersBean = customers.get(i);
+//                customersBeanDao.insert(customersBean);
+//            }
         }
 
     }

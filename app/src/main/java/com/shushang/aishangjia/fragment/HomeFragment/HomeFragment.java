@@ -62,6 +62,7 @@ import com.shushang.aishangjia.utils.OkhttpUtils.CallBackUtil;
 import com.shushang.aishangjia.utils.OkhttpUtils.OkhttpUtil;
 import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
 import com.umeng.analytics.MobclickAgent;
+import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -84,7 +85,7 @@ import okhttp3.Call;
  * </pre>
  */
 public class HomeFragment extends BaseFragment {
-
+    private static final int REQUEST_CODE_SCAN = 2002;
     private Toolbar mToolbar;
     private RecyclerView mRecyclerView,mSignPeopleRecyclerView,mRecyclerView2;
     private SwipeRefreshLayout mSwipeRefreshLayout=null;
@@ -115,8 +116,8 @@ public class HomeFragment extends BaseFragment {
     private String infos;
     private static DaoSession daoSession;
     private String token_id=null;
-
-
+    private LinearLayout mLinearLayout;
+    private String  lianmengtype= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "type");
     public Handler mHandler=new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
@@ -149,6 +150,7 @@ public class HomeFragment extends BaseFragment {
         mRecyclerView2=rootView.findViewById(R.id.rv_sign2);
         mSignPeopleRecyclerView=rootView.findViewById(R.id.rv_sign);
         mSwipeRefreshLayout=rootView.findViewById(R.id.srl_home);
+        mLinearLayout=rootView.findViewById(R.id.scan_code);
         mRequestDialog = ExtAlertDialog.creatRequestDialog(getActivity(), getString(R.string.getDataBase));
         mRequestDialog.setCancelable(false);
         mLiXian=rootView.findViewById(R.id.lixian);
@@ -165,6 +167,22 @@ public class HomeFragment extends BaseFragment {
         mToolbar.setTitle("");
         mTextView=rootView.findViewById(R.id.mounth);
         mLoading=rootView.findViewById(R.id.loading);
+        if(lianmengtype==null||lianmengtype.equals("")){
+            mLinearLayout.setVisibility(View.GONE);
+        }
+        else {
+            mLinearLayout.setVisibility(View.VISIBLE);
+        }
+        mLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //表示所有权限都授权了
+                Intent openCameraIntent = new Intent(getActivity(), CaptureActivity.class);
+                openCameraIntent.putExtra("type", PreferencesUtils.getString(mContext,"roleType"));
+//                openCameraIntent.putExtra("type", "1");
+                startActivityForResult(openCameraIntent, REQUEST_CODE_SCAN );
+            }
+        });
         mLiXian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -382,10 +400,11 @@ public class HomeFragment extends BaseFragment {
 
 
             if(customers !=null&& customers.size()>0) {
-                for (int i = 0; i< customers.size(); i++){
-                    CustomersBean customersBean = customers.get(i);
-                    customersBeanDao.insert(customersBean);
-                }
+                customersBeanDao.insertInTx(customers);
+//                for (int i = 0; i< customers.size(); i++){
+//                    CustomersBean customersBean = customers.get(i);
+//                    customersBeanDao.insert(customersBean);
+//                }
             }
 
             if(mRequestDialog!=null&&mRequestDialog.isShowing()){
@@ -700,5 +719,11 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_SCAN){
+            getData();
+        }
+    }
 }

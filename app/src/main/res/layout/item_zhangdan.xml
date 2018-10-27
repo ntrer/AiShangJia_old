@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<com.shushang.aishangjia.ui.SwipeItemLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+<LinearLayout
+    android:id="@+id/ll_zhangdan"
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_width="match_parent"
@@ -15,10 +22,11 @@
         android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/zhangdan_pic"
         android:layout_gravity="center_vertical"
         android:layout_width="@dimen/dp_50"
         android:layout_height="@dimen/dp_50"
-        android:src="@mipmap/avatar"
+        android:src="@mipmap/zhangdandan"
         android:layout_marginStart="@dimen/dp_10"
         />
 
@@ -31,11 +39,11 @@
 
        <ImageView
            android:id="@+id/getPaper"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:layout_centerInParent="true"
-           android:src="@mipmap/getpaper"
-           android:visibility="gone"
+           android:layout_width="@dimen/dp_36"
+           android:layout_height="@dimen/dp_36"
+           android:layout_alignParentRight="true"
+           android:src="@mipmap/yizuofei"
+           android:visibility="visible"
            />
 
         <TextView
@@ -45,7 +53,7 @@
             android:gravity="center_horizontal"
             android:layout_alignParentLeft="true"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/sp_16"
+            android:textSize="@dimen/sp_14"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/dp_5"
             android:text="联盟名称：数尚家居"
@@ -55,7 +63,7 @@
             android:id="@+id/prove"
             android:layout_width="@dimen/dp_150"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/sp_12"
             android:maxEms="12"
             android:layout_below="@id/merchat"
             android:layout_alignParentLeft="true"
@@ -70,7 +78,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_below="@id/prove"
-            android:textSize="@dimen/sp_12"
+            android:textSize="@dimen/sp_10"
             android:layout_marginBottom="@dimen/dp_10"
             android:text="2018-07-06 14:25:22"
             />
@@ -80,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/sp_12"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:textColor="@color/md_black_1000"
@@ -92,12 +100,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/sp_12"
             android:layout_alignBottom="@id/date"
             android:layout_alignParentRight="true"
-            android:textColor="@color/md_black_1000"
+            android:textColor="@color/md_deep_orange_A700"
             android:text="收入"
+            android:visibility="gone"
             />
+
+        <TextView
+            android:id="@+id/type2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/sp_12"
+            android:layout_alignBottom="@id/date"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/md_green_500"
+            android:text="支出"
+            android:visibility="gone"
+            />
+
     </RelativeLayout>
     </LinearLayout>
     <View
@@ -106,3 +129,17 @@
         android:background="@color/line"
         />
 </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <Button
+            android:id="@+id/quit"
+            android:text="退单"
+            android:background="@color/md_red_400"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:layout_width="100dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</com.shushang.aishangjia.ui.SwipeItemLayout>

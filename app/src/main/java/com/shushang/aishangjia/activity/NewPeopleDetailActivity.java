@@ -64,6 +64,7 @@ public class NewPeopleDetailActivity extends AppCompatActivity {
     private static final int REQUEST_PROGRESS_ACTIVITY = 2012;
     private String progress=null;
     private String type;
+    private String lianmeng;
 //    private TimeCount time;
     private Dialog mRequestDialog;
     @Override

@@ -110,7 +110,7 @@ public class SignActivity extends BaseActivity {
             public void onClick(View view) {
                 sign_time = mTextView1.getText().toString();
                 sign_address = mTextView2.getText().toString();
-                sign_map = String.valueOf(mTextView3.getText());
+                sign_map = valueOf(mTextView3.getText());
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 if (mBitmap != null) {
                     mBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
@@ -191,7 +191,7 @@ public class SignActivity extends BaseActivity {
             }
             //        String url = BaseUrl.BASE_URL + "phoneApi/customerManager.do?method=managerSignin&token_id="+token_id+"&qdsj="+sign_time+"&qddz="+sign_map+"&qdlh="+sign_address;
             String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=managerSignin";
-//          String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=managerSignin&token_id="+token_id;
+//            String url= BaseUrl.BASE_URL+"fileController.do?method=upload&token_id="+token_id+"&type=cw";
             postGoodsPicToServer(url);
         }
     }

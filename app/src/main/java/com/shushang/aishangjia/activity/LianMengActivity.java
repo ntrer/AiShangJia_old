@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.shushang.aishangjia.Bean.NewPeople;
+import com.shushang.aishangjia.Bean.LianMeng;
 import com.shushang.aishangjia.MainActivity2;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.application.MyApplication;
@@ -51,8 +51,8 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
     private static final int REQUEST_CODE_DAILY = 2006;
     private static final int REQUEST_CODE_XIANSUO = 2002;
     private static final int REQUEST_CODE_NEW_PEOPLE =2662;
-    private List<NewPeople.DataListBean> dataList=new ArrayList<>();
-    private  List<NewPeople.DataListBean> data=new ArrayList<>();
+    private List<LianMeng.DataListBean> dataList=new ArrayList<>();
+    private  List<LianMeng.DataListBean> data=new ArrayList<>();
     private LianMengAdapter mLianMengAdapter;
     private String  token_id = PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "token_id");
     private Context myContext;
@@ -84,7 +84,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
 
 
     public void getData() {
-        String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=getCustomers&token_id="+token_id+"&page=1&rows=10&date=2018-10-17"+"&type=0";
+        String url= BaseUrl.BASE_URL+"phoneLeagueController.do?method=getShareCustomers&token_id="+token_id+"&page=1&rows=10";
         Log.d("BaseUrl",url);
         mSwipeRefreshLayout.setRefreshing(true);
         RestClient.builder()
@@ -96,7 +96,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
                             mSwipeRefreshLayout.setRefreshing(false);
                             Log.d("AppPeopleActivity",response);
                             try {
-                                NewPeople test = JSONUtil.fromJson(response, NewPeople.class);
+                                LianMeng test = JSONUtil.fromJson(response, LianMeng.class);
                                 if(test.getRet().equals("101")){
                                     Toast.makeText(LianMengActivity.this, ""+test.getMsg(), Toast.LENGTH_SHORT).show();
                                     PreferencesUtils.putString(LianMengActivity.this,"token_id",null);
@@ -144,7 +144,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
                 .get();
     }
 
-    private void showTabData(final List<NewPeople.DataListBean> dataList) {
+    private void showTabData(final List<LianMeng.DataListBean> dataList) {
         mLianMengAdapter = new LianMengAdapter(R.layout.item_lianmeng, dataList,this);
         final LinearLayoutManager linermanager=new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linermanager);
@@ -152,8 +152,8 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
         mLianMengAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                Intent intent=new Intent(LianMengActivity.this,NewPeopleDetailActivity.class);
-                NewPeople.DataListBean dataListBean = dataList.get(position);
+                Intent intent=new Intent(LianMengActivity.this,NewPeopleDetailActivity2.class);
+                LianMeng.DataListBean dataListBean = dataList.get(position);
                 intent.putExtra("data",dataListBean);
                 startActivityForResult(intent,REQUEST_CODE_NEW_PEOPLE);
             }
@@ -182,7 +182,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
 
     private void loadMore() {
         page=page+1;
-        String url= BaseUrl.BASE_URL+"phoneApi/customerManager.do?method=getCustomers&token_id="+token_id+"&page="+page+"&rows=10"+"&date=2018-10-17"+"&type=0";
+        String url= BaseUrl.BASE_URL+"phoneLeagueController.do?method=getShareCustomers&token_id="+token_id+"&page="+page+"&rows=10";
         try {
             RestClient.builder()
                     .url(url)
@@ -191,7 +191,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
                         public void onSuccess(String response) {
                             if(response!=null) {
                                 Log.d("nnnnnnn",response);
-                                NewPeople test = JSONUtil.fromJson(response, NewPeople.class);
+                                LianMeng test = JSONUtil.fromJson(response, LianMeng.class);
                                 if(test.getRet().equals("200")){
                                     if(page>test.getIntmaxPage()){
                                         page=1;
@@ -199,7 +199,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
                                         mLianMengAdapter.loadMoreEnd();
                                     }
                                     else if(test.getDataList().size()!=0){
-                                        List<NewPeople.DataListBean> dataList = test.getDataList();
+                                        List<LianMeng.DataListBean> dataList = test.getDataList();
                                         LoadMoreData(dataList);
                                         Log.d("33333333333",response);
                                         mLianMengAdapter.loadMoreComplete();
@@ -241,7 +241,7 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
 
     }
 
-    private void LoadMoreData(List<NewPeople.DataListBean> dataList) {
+    private void LoadMoreData(List<LianMeng.DataListBean> dataList) {
         if(dataList.size()!=0){
             mLianMengAdapter.addData(dataList);
             mLianMengAdapter.loadMoreComplete();

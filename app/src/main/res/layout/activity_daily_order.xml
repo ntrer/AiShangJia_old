@@ -42,6 +42,7 @@
 
             <!--姓名-->
             <RelativeLayout
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_48">
 
@@ -79,6 +80,7 @@
             <View style="@style/activity_register_v_horizontal_divider" />
             <!--手机号-->
             <RelativeLayout
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_48">
                 <LinearLayout
@@ -118,6 +120,7 @@
 
             <!--小区名称-->
             <RelativeLayout
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_48">
 

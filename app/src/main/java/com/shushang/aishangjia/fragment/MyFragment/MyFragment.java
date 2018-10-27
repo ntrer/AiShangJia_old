@@ -233,6 +233,8 @@ public class MyFragment extends BaseFragment implements View.OnClickListener {
                                 PreferencesUtils.putString(mContext, "password", null);
                                 PreferencesUtils.putString(mContext, "token_id",null);
                                 PreferencesUtils.putString(mContext,"roleType",null);
+                                PreferencesUtils.putString(mContext,"type",null);
+                                PreferencesUtils.putString(mContext,"shangjia_id",null);
                                 startActivity(new Intent(getActivity(), LoginActivity2.class));
                                 Log.d("推出了","7");
                                 getActivity().finish();

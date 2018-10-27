@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:a_zhon="http://schemas.android.com/tools"
     android:clipChildren="false"
+    android:background="#F5F5F5"
     >
 
     <android.support.v7.widget.Toolbar

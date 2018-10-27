@@ -53,18 +53,6 @@
         android:layout_below="@id/toolbar"
         >
 
-        <TextView
-            android:id="@+id/allMerchat"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="全部"
-            android:textColor="@drawable/text_select"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rl_tab"
             android:layout_width="0dp"

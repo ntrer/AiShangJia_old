@@ -27,6 +27,7 @@ import com.shushang.aishangjia.Bean.UpDate;
 import com.shushang.aishangjia.base.BaseActivity;
 import com.shushang.aishangjia.base.BaseUrl;
 import com.shushang.aishangjia.base.PermissionListener;
+import com.shushang.aishangjia.fragment.AppFragment.AppFragment;
 import com.shushang.aishangjia.fragment.GiftPaperFragment.GiftPaperFragment;
 import com.shushang.aishangjia.fragment.HomeFragment.HomeFragment;
 import com.shushang.aishangjia.fragment.MoneyFragment.MoneyFragment;
@@ -55,19 +56,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final int REQUEST_CODE_WRITE_STORAGE = 1002;
     private static final int REQUEST_CODE_UNKNOWN_APP = 2001;
     private static final int REQUEST_CODE_SCAN = 2002;
-   private Handler mHandler;
+    private Handler mHandler;
     private HomeFragment mHomeFragment;
+    private AppFragment mAppFragment;
     private ImageView mImageView;
     private MyFragment mMyFragment;
     private MoneyFragment mMoneyFragment;
     private ScanFragment mScanFragment;
     private GiftPaperFragment mGiftPaperFragment;
     private int lastfragment;//用于记录上个选择的Fragment
-    private BottomNavigationView navigation;
+    private BottomNavigationView navigation,mNavigationView,mNavigationView2;
     private Fragment[] mFragments ;
-    private String type;
+    private String type,lianmengtype;
     private int versionCode;
     private String token_id;
+    private  String noActivityLianmeng;
     //退出时的时间
     private long mExitTime;
     @Override
@@ -79,8 +82,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void init() {
         mContext=this;
         mImageView= (ImageView) findViewById(R.id.navigation_center_image);
+        navigation = (BottomNavigationView) findViewById(R.id.navigation_fragment);
+        mNavigationView=findViewById(R.id.navigation_fragment2);
+        mNavigationView2=findViewById(R.id.navigation_fragment3);
         mImageView.setOnClickListener(this);
+        Intent intent=getIntent();
+        noActivityLianmeng = intent.getStringExtra("noActivityLianmeng");
         token_id= PreferencesUtils.getString(mContext,"token_id");
+        lianmengtype= PreferencesUtils.getString(this, "type");
+        permissionCamera2();
         initFragment();
         inidData(token_id);
     }
@@ -160,80 +170,219 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     //初始化fragment和fragment数组
     private void initFragment() {
-        type= PreferencesUtils.getString(mContext,"roleType");
+        if(lianmengtype==null||lianmengtype.equals("")){
+            mNavigationView.setVisibility(View.GONE);
+            mNavigationView2.setVisibility(View.GONE);
+            type= PreferencesUtils.getString(mContext,"roleType");
 //        type="1";
-        mHomeFragment = new HomeFragment();
-        mMyFragment = new MyFragment();
-        mScanFragment=new ScanFragment();
-        mMoneyFragment=new MoneyFragment();
-        mGiftPaperFragment=new GiftPaperFragment();
-        mFragments = new Fragment[]{mHomeFragment,mMoneyFragment, mGiftPaperFragment,mMyFragment};
-        if(type.equals("0")){
-            lastfragment = 0;
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mHomeFragment).show(mHomeFragment).commit();
-        }
-        else if(type.equals("1")) {
-            lastfragment = 1;
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mMoneyFragment).show(mMoneyFragment).commit();
-        }
-        else if(type.equals("2")) {
-            lastfragment = 2;
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mGiftPaperFragment).show(mGiftPaperFragment).commit();
-        }
-        navigation = (BottomNavigationView) findViewById(R.id.navigation_fragment);
-        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId())
-                {
-                    case R.id.navigation_fragment_zero:
+            mHomeFragment = new HomeFragment();
+            mMyFragment = new MyFragment();
+            mScanFragment=new ScanFragment();
+            mMoneyFragment=new MoneyFragment();
+            mGiftPaperFragment=new GiftPaperFragment();
+            mFragments = new Fragment[]{mHomeFragment,mMoneyFragment, mGiftPaperFragment,mMyFragment};
+            if(type.equals("0")){
+                lastfragment = 0;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mHomeFragment).show(mHomeFragment).commit();
+            }
+            else if(type.equals("1")) {
+                lastfragment = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mMoneyFragment).show(mMoneyFragment).commit();
+            }
+            else if(type.equals("2")) {
+                lastfragment = 2;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mGiftPaperFragment).show(mGiftPaperFragment).commit();
+            }
+            navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId())
                     {
-                         if(type.equals("0")){
-
-                             if(lastfragment!=0)
-                             {
-                                 switchFragment(lastfragment,0);
-                                 lastfragment=0;
-
-                             }
-                             return true;
-                         }
-                         else if(type.equals("1")) {
-                             if(lastfragment!=1)
-                             {
-                                 switchFragment(lastfragment,1);
-                                 lastfragment=1;
-
-                             }
-                             return true;
-                         }
-                         else {
-                             if(lastfragment!=2)
-                             {
-                                 switchFragment(lastfragment,2);
-                                 lastfragment=2;
-
-                             }
-                             return true;
-                         }
-
-                    }
-                    case R.id.navigation_fragment_two:
-                    {
-                        if(lastfragment!=3)
+                        case R.id.navigation_fragment_zero:
                         {
-                            switchFragment(lastfragment,3);
-                            lastfragment=3;
+                            if(type.equals("0")){
+
+                                if(lastfragment!=0)
+                                {
+                                    switchFragment(lastfragment,0);
+                                    lastfragment=0;
+
+                                }
+                                return true;
+                            }
+                            else if(type.equals("1")) {
+                                if(lastfragment!=1)
+                                {
+                                    switchFragment(lastfragment,1);
+                                    lastfragment=1;
+
+                                }
+                                return true;
+                            }
+                            else {
+                                if(lastfragment!=2)
+                                {
+                                    switchFragment(lastfragment,2);
+                                    lastfragment=2;
+
+                                }
+                                return true;
+                            }
 
                         }
+                        case R.id.navigation_fragment_two:
+                        {
+                            if(lastfragment!=3)
+                            {
+                                switchFragment(lastfragment,3);
+                                lastfragment=3;
 
-                        return true;
+                            }
+
+                            return true;
+                        }
+
                     }
-
+                    return false;
                 }
-                return false;
+            });
+        }
+        else if(lianmengtype.equals("7")&&noActivityLianmeng.equals("true")){
+            mNavigationView.setVisibility(View.GONE);
+            navigation.setVisibility(View.GONE);
+            mImageView.setVisibility(View.GONE);
+            mNavigationView2.setVisibility(View.VISIBLE);
+            mMyFragment = new MyFragment();
+            mAppFragment=new AppFragment();
+            mFragments = new Fragment[]{mAppFragment,mMyFragment};
+            lastfragment = 0;
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mAppFragment).show(mAppFragment).commit();
+            mNavigationView2.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId())
+                    {
+                        case R.id.navigation_fragment_zero:
+                        {
+                                if(lastfragment!=0)
+                                {
+                                    switchFragment(lastfragment,0);
+                                    lastfragment=0;
+
+                                }
+                                return true;
+
+                        }
+                        case R.id.navigation_fragment_one:
+                        {
+                            if(lastfragment!=1)
+                            {
+                                switchFragment(lastfragment,1);
+                                lastfragment=1;
+
+                            }
+
+                            return true;
+                        }
+
+                    }
+                    return false;
+                }
+            });
+        }
+        else if(lianmengtype.equals("7")&&noActivityLianmeng.equals("false")){
+            mNavigationView.setVisibility(View.VISIBLE);
+            navigation.setVisibility(View.GONE);
+            mImageView.setVisibility(View.GONE);
+            mNavigationView2.setVisibility(View.GONE);
+            type= PreferencesUtils.getString(mContext,"roleType");
+//        type="1";
+            mHomeFragment = new HomeFragment();
+            mMyFragment = new MyFragment();
+            mScanFragment=new ScanFragment();
+            mMoneyFragment=new MoneyFragment();
+            mAppFragment=new AppFragment();
+            mGiftPaperFragment=new GiftPaperFragment();
+            mFragments = new Fragment[]{mHomeFragment,mMoneyFragment, mGiftPaperFragment,mAppFragment,mMyFragment};
+            if(type.equals("0")){
+                lastfragment = 0;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mHomeFragment).show(mHomeFragment).commit();
             }
-        });
+            else if(type.equals("1")) {
+                lastfragment = 1;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mMoneyFragment).show(mMoneyFragment).commit();
+            }
+            else if(type.equals("2")) {
+                lastfragment = 2;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mGiftPaperFragment).show(mGiftPaperFragment).commit();
+            }
+
+            mNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId())
+                    {
+                        case R.id.navigation_fragment_zero:
+                        {
+                            if(type.equals("0")){
+
+                                if(lastfragment!=0)
+                                {
+                                    switchFragment(lastfragment,0);
+                                    lastfragment=0;
+
+                                }
+                                return true;
+                            }
+                            else if(type.equals("1")) {
+                                if(lastfragment!=1)
+                                {
+                                    switchFragment(lastfragment,1);
+                                    lastfragment=1;
+
+                                }
+                                return true;
+                            }
+                            else {
+                                if(lastfragment!=2)
+                                {
+                                    switchFragment(lastfragment,2);
+                                    lastfragment=2;
+
+                                }
+                                return true;
+                            }
+
+                        }
+                        case R.id.navigation_fragment_one:
+                        {
+                            if(lastfragment!=3)
+                            {
+                                switchFragment(lastfragment,3);
+                                lastfragment=3;
+
+                            }
+
+                            return true;
+                        }
+                        case R.id.navigation_fragment_two:
+                        {
+                            if(lastfragment!=4)
+                            {
+                                switchFragment(lastfragment,4);
+                                lastfragment=4;
+
+                            }
+
+                            return true;
+                        }
+
+                    }
+                    return false;
+                }
+            });
+
+        }
 
     }
 
@@ -332,11 +481,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                List<ActionCustomersBean> actionCustomersBeans = MyApplication.getDaoInstant().getActionCustomersBeanDao().loadAll();
 //                List<CustomersBean> customersBeans = MyApplication.getDaoInstant().getCustomersBeanDao().loadAll();
 
-                //表示所有权限都授权了
-                Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
-                openCameraIntent.putExtra("type", PreferencesUtils.getString(mContext,"roleType"));
+//                if(lianmengtype!=null||lianmengtype.equals("7")){
+//
+//                }
+//                else {
+                    //表示所有权限都授权了
+                    Intent openCameraIntent = new Intent(MainActivity.this, CaptureActivity.class);
+                    openCameraIntent.putExtra("type", PreferencesUtils.getString(mContext,"roleType"));
 //                openCameraIntent.putExtra("type", "1");
-                startActivityForResult(openCameraIntent, REQUEST_CODE_SCAN );
+                    startActivityForResult(openCameraIntent, REQUEST_CODE_SCAN );
+//                }
+
             }
 
             @Override
@@ -347,6 +502,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
+
+
+    private void permissionCamera2(){
+        requestRunPermisssion(new String[]{Manifest.permission.CAMERA}, new PermissionListener() {
+            @Override
+            public void onGranted() {
+
+
+            }
+
+            @Override
+            public void onDenied(List<String> deniedPermission) {
+                for(String permission : deniedPermission){
+                    reGetPermission();
+                }
+            }
+        });
+    }
+
+
+
     //请求存储权限
     private void permissionStorage(){
         requestRunPermisssion(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
@@ -408,7 +584,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mHandler.removeCallbacksAndMessages(this);
+        if(mHandler!=null){
+            mHandler.removeCallbacksAndMessages(this);
+        }
     }
 
 

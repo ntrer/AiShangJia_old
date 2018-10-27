@@ -28,6 +28,26 @@
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation_fragment" />
 
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation_fragment2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/navigation_fragment4" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation_fragment3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/navigation_fragment3" />
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -54,7 +54,7 @@
             android:id="@+id/label"
             android:layout_width="@dimen/dp_150"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_16"
+            android:textSize="@dimen/sp_14"
             android:maxEms="12"
             android:layout_below="@id/people"
             android:layout_alignParentLeft="true"
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textSize="@dimen/sp_16"
+            android:textSize="@dimen/sp_14"
             android:layout_alignParentRight="true"
             android:textColor="@color/md_black_1000"
             android:text="18637280068"
@@ -87,8 +87,8 @@
 
         <ImageView
             android:id="@+id/call"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
+            android:layout_width="@dimen/dp_26"
+            android:layout_height="@dimen/dp_26"
             android:src="@mipmap/phone"
             android:layout_alignBottom="@id/date"
             android:layout_alignParentRight="true"

@@ -75,6 +75,9 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
             if(PreferencesUtils.getString(mContext,"type").equals("3")){
                 startActivity(new Intent(LoginActivity2.this, MainActivity2.class));
             }
+            else if(PreferencesUtils.getString(mContext,"type").equals("7")){
+                startActivity(new Intent(LoginActivity2.this, ActivityListActivity.class));
+            }
             else {
                 startActivity(new Intent(LoginActivity2.this, ActivityListActivity.class));
             }
@@ -160,6 +163,10 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                                         isFirst = false;
                                         if(login.getData().getType().equals("3")){
                                             startActivity(new Intent(LoginActivity2.this,MainActivity2.class));
+                                        }
+                                        else if(login.getData().getType().equals("7")){
+                                            PreferencesUtils.putString(mContext, "shangjia_id",login.getData().getShangjia_id());
+                                            startActivity(new Intent(LoginActivity2.this,ActivityListActivity.class));
                                         }
                                         else {
                                             startActivity(new Intent(LoginActivity2.this,ActivityListActivity.class));

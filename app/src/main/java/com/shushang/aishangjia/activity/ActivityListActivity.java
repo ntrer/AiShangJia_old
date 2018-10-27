@@ -3,7 +3,6 @@ package com.shushang.aishangjia.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +20,9 @@ import com.shushang.aishangjia.Bean.ActionCustomersBean;
 import com.shushang.aishangjia.Bean.ActivityBean;
 import com.shushang.aishangjia.Bean.ActivityList;
 import com.shushang.aishangjia.Bean.CustomersBean;
+import com.shushang.aishangjia.Bean.Response;
 import com.shushang.aishangjia.Bean.UserData;
+import com.shushang.aishangjia.Bean.info;
 import com.shushang.aishangjia.MainActivity;
 import com.shushang.aishangjia.R;
 import com.shushang.aishangjia.activity.adapter.ActivityListAdapter;
@@ -39,21 +40,29 @@ import com.shushang.aishangjia.net.callback.IFailure;
 import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.aishangjia.utils.ActivityManager.ActivityStackManager;
+import com.shushang.aishangjia.utils.OkhttpUtils.CallBackUtil;
+import com.shushang.aishangjia.utils.OkhttpUtils.OkhttpUtil;
 import com.xys.libzxing.zxing.utils.JSONUtil;
 import com.xys.libzxing.zxing.utils.PreferencesUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.Call;
 
 public class ActivityListActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private String token_id = null;
-    private Button mButton;
+    private Button mButton,mButton2;
     private LinearLayout ll_nodata;
     private ActivityListAdapter mActivityListAdapter;
     private List<ActivityList.DataListBean> dataList=new ArrayList<>();
+    private List<ActionCustomersBean> actionCustomers3=new ArrayList<>();
+    private List<info> mInfos=new ArrayList<>();
+    private String infos;
     private String type;
     private Toolbar mToolbar;
     //退出时的时间
@@ -82,7 +91,9 @@ public class ActivityListActivity extends BaseActivity {
         mRequestDialog = ExtAlertDialog.creatRequestDialog(ActivityListActivity.this, getString(R.string.getDataBase));
         mRequestDialog.setCancelable(false);
         token_id = PreferencesUtils.getString(this, "token_id");
+        type=PreferencesUtils.getString(this, "type");
         mButton= (Button) findViewById(R.id.btn_quit);
+        mButton2=findViewById(R.id.btn_lianmeng);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,8 +106,18 @@ public class ActivityListActivity extends BaseActivity {
                 finish();
             }
         });
+        mButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(ActivityListActivity.this,MainActivity.class);
+                intent.putExtra("noActivityLianmeng","true");
+                startActivity(intent);
+            }
+        });
         initData();
         initRecyclerView();
+        List<ActionCustomersBean> actionCustomersBeans = actionCustomersBeanDao.loadAll();
+        getUpdateInfo(actionCustomersBeans);
     }
 
     private void initRecyclerView() {
@@ -124,12 +145,19 @@ public class ActivityListActivity extends BaseActivity {
                                             mProgressBar.setVisibility(View.GONE);
                                             ll_nodata.setVisibility(View.GONE);
                                             mButton.setVisibility(View.GONE);
+                                            mButton2.setVisibility(View.GONE);
                                             showData(dataList);
                                         }
                                         else {
                                             mProgressBar.setVisibility(View.GONE);
                                             ll_nodata.setVisibility(View.VISIBLE);
                                             mButton.setVisibility(View.VISIBLE);
+                                            if(type.equals("7")){
+                                                mButton2.setVisibility(View.VISIBLE);
+                                            }
+                                            else {
+                                                mButton2.setVisibility(View.GONE);
+                                            }
 
 //                                    PreferencesUtils.putString(ActivityListActivity.this, "token_id",null);
 //                                    startActivity(new Intent(ActivityListActivity.this,LoginActivity2.class));
@@ -188,16 +216,104 @@ public class ActivityListActivity extends BaseActivity {
                 PreferencesUtils.putString(ActivityListActivity.this,"activityId",activityId);
                 Log.d("wocaoyd",activityId+"");
                 PreferencesUtils.putString(ActivityListActivity.this,"roleType",roleType);
-                mRequestDialog.show();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getUserData();
-                    }
-                },1000);
+                UpDate();
             }
         });
     }
+
+    private void getUpdateInfo(List<ActionCustomersBean> actionCustomersBeans) {
+        if(actionCustomersBeans.size()!=0){
+            try {
+                for (int i=0;i<actionCustomersBeans.size();i++){
+                    if(actionCustomersBeans.get(i).getQdsucess().equals("1")&&actionCustomersBeans.get(i).getIsSign()!=null){
+                        actionCustomers3.add(actionCustomersBeans.get(i));
+                    }
+                }
+
+                for (int i=0;i<actionCustomers3.size();i++){
+                    info info=new info();
+                    info.setCustomerActionId(actionCustomers3.get(i).getCustomerActionId());
+                    info.setQdsj(String.valueOf(actionCustomers3.get(i).getQdsj()));
+                    info.setQdsuccess(actionCustomers3.get(i).getQdsucess());
+                    info.setLqsj(String.valueOf(actionCustomers3.get(i).getLqsj()));
+                    info.setLqsuccess(actionCustomers3.get(i).getLqsuccess());
+                    mInfos.add(info);
+                }
+
+                infos = JSONUtil.toJSON(mInfos);
+                Log.d("Updateinfos",infos+"");
+            }
+            catch (Exception e){
+                ToastUtils.showLong("操作失败，请重试");
+            }
+        }
+
+    }
+
+
+    private void UpDate() {
+        if(infos==null||infos.equals("")){
+            mRequestDialog.show();
+            getUserData();
+        }
+        else {
+            mRequestDialog.show();
+            String url = BaseUrl.BASE_URL+"phoneApi/outLineController.do?method=uploadData&token_id="+token_id;
+            HashMap<String, String> paramsMap = new HashMap<>();
+            paramsMap.put("info", infos);
+            OkhttpUtil.okHttpPost(url, paramsMap, new CallBackUtil.CallBackString() {
+                @Override
+                public void onFailure(Call call, Exception e) {
+                    if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                        mRequestDialog.dismiss();
+                    }
+                    ToastUtils.showLong("当前网络链接有问题，同步数据库失败，无法退出离线模式");
+                }
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d("创建活动",response);
+                    if(response!=null){
+                        try {
+                            Response response1 = com.shushang.aishangjia.utils.Json.JSONUtil.fromJson(response, Response.class);
+                            if(response1.getRet().equals("200")){
+                                getUserData();
+                            }
+                            else if(response1.getRet().equals("201")){
+                                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                    mRequestDialog.dismiss();
+                                }
+                                Toast.makeText(ActivityListActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
+                            else if (response1.getRet().equals("101")) {
+                                Toast.makeText(ActivityListActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
+                                PreferencesUtils.putString(ActivityListActivity.this, "token_id", null);
+                                startActivity(new Intent(ActivityListActivity.this, LoginActivity2.class));
+                                finish();
+                            }
+                            else {
+                                if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                    mRequestDialog.dismiss();
+                                }
+                                Toast.makeText(ActivityListActivity.this, ""+response1.getMsg(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        catch (Exception e){
+                            ToastUtils.showLong(e.toString());
+                        }
+
+                    }
+
+                }
+            });
+
+        }
+
+    }
+
+
+
+
 
     //对返回键进行监听
     @Override
@@ -332,19 +448,27 @@ public class ActivityListActivity extends BaseActivity {
                 }
             }
 
-
             if(customers !=null&& customers.size()>0) {
-                for (int i = 0; i< customers.size(); i++){
-                    CustomersBean customersBean = customers.get(i);
-                    customersBeanDao.insert(customersBean);
-                }
+                customersBeanDao.insertInTx(customers);
+//                for (int i = 0; i< customers.size(); i++){
+//                    CustomersBean customersBean = customers.get(i);
+//                    customersBeanDao.insert(customersBean);
+//                }
             }
 
             if(mRequestDialog!=null&&mRequestDialog.isShowing()){
                 mRequestDialog.dismiss();
             }
 
-            startActivity(new Intent(ActivityListActivity.this, MainActivity.class));
+            if(type.equals("")||type==null){
+                startActivity(new Intent(ActivityListActivity.this, MainActivity.class));
+            }
+            else if(type.equals("7")){
+                Intent intent=new Intent(ActivityListActivity.this,MainActivity.class);
+                intent.putExtra("noActivityLianmeng","false");
+                startActivity(intent);
+            }
+
             finish();
         }
         catch (Exception e){

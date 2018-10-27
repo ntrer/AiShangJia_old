@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="吴彦祖"
         android:gravity="center"
-        android:textSize="18sp"
+        android:textSize="@dimen/sp_14"
         android:textColor="@drawable/text_select"
         android:layout_gravity="center_horizontal"
         android:singleLine="true"

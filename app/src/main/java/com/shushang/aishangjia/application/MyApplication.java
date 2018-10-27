@@ -12,10 +12,14 @@ import com.joanzapata.iconify.fonts.IoniconsModule;
 import com.shushang.AppContext;
 import com.shushang.aishangjia.greendao.DaoMaster;
 import com.shushang.aishangjia.greendao.DaoSession;
+import com.shushang.aishangjia.utils.MediaLoader;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.umeng.commonsdk.UMConfigure;
+import com.yanzhenjie.album.Album;
+import com.yanzhenjie.album.AlbumConfig;
 
+import java.util.Locale;
 import java.util.Set;
 
 import cn.finalteam.okhttpfinal.OkHttpFinal;
@@ -56,6 +60,12 @@ public class MyApplication extends Application {
                 .with(new FontAwesomeModule())
                 .with(new IoniconsModule());
         UMConfigure.init(this, "5b685121f43e483ac200041d", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, null);
+
+        Album.initialize(AlbumConfig.newBuilder(this)
+                .setAlbumLoader(new MediaLoader())
+                .setLocale(Locale.getDefault())
+                .build()
+        );
     }
 
     private void setUpDataBase() {
