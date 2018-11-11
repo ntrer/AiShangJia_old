@@ -135,7 +135,7 @@
         android:layout_height="match_parent">
         <Button
             android:id="@+id/quit"
-            android:text="退单"
+            android:text="作废"
             android:background="@color/md_red_400"
             android:textColor="#ffffff"
             android:textSize="18sp"

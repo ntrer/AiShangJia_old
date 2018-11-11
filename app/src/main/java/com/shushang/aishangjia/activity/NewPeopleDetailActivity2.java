@@ -3,8 +3,10 @@ package com.shushang.aishangjia.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -12,11 +14,21 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.shushang.aishangjia.Bean.Leagues;
 import com.shushang.aishangjia.Bean.LianMeng;
+import com.shushang.aishangjia.Bean.Quit;
 import com.shushang.aishangjia.R;
+import com.shushang.aishangjia.base.BaseUrl;
+import com.shushang.aishangjia.net.RestClient;
+import com.shushang.aishangjia.net.callback.IError;
+import com.shushang.aishangjia.net.callback.IFailure;
+import com.shushang.aishangjia.net.callback.ISuccess;
 import com.shushang.aishangjia.ui.ExtAlertDialog;
 import com.shushang.aishangjia.ui.GenderDialog;
+import com.shushang.aishangjia.ui.dialog.ActionSheetDialog;
+import com.shushang.aishangjia.utils.Json.JSONUtil;
 import com.xys.libzxing.zxing.utils.PreferencesUtils;
 
 public class NewPeopleDetailActivity2 extends AppCompatActivity {
@@ -52,10 +64,13 @@ public class NewPeopleDetailActivity2 extends AppCompatActivity {
     private String lianmeng;
     //    private TimeCount time;
     private Dialog mRequestDialog;
+    private  Dialog modifyPasswordOkDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_people_detail2);
+        modifyPasswordOkDialog = ExtAlertDialog.createModifyPasswordOkDialog2(NewPeopleDetailActivity2.this);
         mEtCustomerName = (TextView) findViewById(R.id.et_customer_name);
         mEtCustomerMobile = (TextView) findViewById(R.id.et_customer_mobile);
         mLlCustomerGender = (LinearLayout) findViewById(R.id.ll_customer_gender);
@@ -63,6 +78,7 @@ public class NewPeopleDetailActivity2 extends AppCompatActivity {
         mTvDecorateProgress = (TextView) findViewById(R.id.et_customer_progress);
         mEtDecorateStyle =  findViewById(R.id.et_decorate_style);
         mEtDecorateAddress = (TextView) findViewById(R.id.tv_customer_address);
+        mEdit=findViewById(R.id.edit);
         mLLXiaoqu=findViewById(R.id.ll_xiaoqu);
         mLLStyle=findViewById(R.id.ll_style);
         mLLProduct=findViewById(R.id.ll_product);
@@ -79,6 +95,7 @@ public class NewPeopleDetailActivity2 extends AppCompatActivity {
         token_id = PreferencesUtils.getString(this, "token_id");
         final Intent data=getIntent();
         final LianMeng.DataListBean dataListBean= (LianMeng.DataListBean) data.getSerializableExtra("data");
+        customerActionId=dataListBean.getCustomerActionId();
         mTvDecorateProgress.setEnabled(false);
         mEtDecorateAddress.setEnabled(false);
         mLLProduct.setEnabled(false);
@@ -105,9 +122,185 @@ public class NewPeopleDetailActivity2 extends AppCompatActivity {
             }
         });
 
-
+        mEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new ActionSheetDialog(NewPeopleDetailActivity2.this)
+                        .builder()
+                        .setCancelable(false)
+                        .setCanceledOnTouchOutside(true)
+                        .addSheetItem("收回客户", ActionSheetDialog.SheetItemColor.Blue,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
+                                       recycleCustomer(customerActionId);
+                                    }
+                                })
+                        .addSheetItem("作废客户", ActionSheetDialog.SheetItemColor.Blue,
+                                new ActionSheetDialog.OnSheetItemClickListener() {
+                                    @Override
+                                    public void onClick(int which) {
+                                       cancleCustomer(customerActionId);
+                                    }
+                                })
+                        .show();
+            }
+        });
 
     }
+
+
+    private void cancleCustomer(String customerActionId) {
+        mRequestDialog.show();
+        String url = BaseUrl.BASE_URL + "phoneLeagueController.do?method=cancelCustomer&token_id=" + token_id+"&customerActionId="+customerActionId;
+        Log.d("TabList2", url);
+        RestClient.builder()
+                .url(url)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("TabList", response);
+                        if (response != null) {
+                            try {
+                                Leagues tabList = JSONUtil.fromJson(response, Leagues.class);
+                                if (tabList.getRet().equals("101")) {
+                                    Toast.makeText(NewPeopleDetailActivity2.this, "" + tabList.getMsg(), Toast.LENGTH_SHORT).show();
+                                    com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils.putString(NewPeopleDetailActivity2.this, "token_id", null);
+                                    startActivity(new Intent(NewPeopleDetailActivity2.this, LoginActivity2.class));
+                                    finish();
+                                } else {
+                                    if (tabList.getRet().equals("200")) {
+                                        if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                            mRequestDialog.dismiss();
+                                        }
+                                        if(NewPeopleDetailActivity2.this!=null&&!NewPeopleDetailActivity2.this.isDestroyed()&&!NewPeopleDetailActivity2.this.isFinishing()){
+                                            modifyPasswordOkDialog.show();
+                                        }
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if(modifyPasswordOkDialog!=null&&modifyPasswordOkDialog.isShowing()){
+                                                    modifyPasswordOkDialog.dismiss();
+                                                    finish();
+                                                }
+                                            }
+                                        },1000);
+                                    } else if (tabList.getRet().equals("201")) {
+                                        if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                                            mRequestDialog.dismiss();
+                                        }
+                                        Toast.makeText(NewPeopleDetailActivity2.this, "" + tabList.getMsg(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                                    mRequestDialog.dismiss();
+                                }
+                            }
+                        }
+
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                            mRequestDialog.dismiss();
+                        }
+                        Toast.makeText(NewPeopleDetailActivity2.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                            mRequestDialog.dismiss();
+                        }
+                        Toast.makeText(NewPeopleDetailActivity2.this, "获取数据错误了！！！！", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build()
+                .get();
+    }
+
+
+    private void recycleCustomer(String customerActionId) {
+        mRequestDialog.show();
+        String url = BaseUrl.BASE_URL + "phoneLeagueController.do?method=takeBackShareCustomer&token_id=" + token_id+"&customerActionId="+customerActionId;
+        Log.d("TabList1", url);
+        RestClient.builder()
+                .url(url)
+                .success(new ISuccess() {
+                    @Override
+                    public void onSuccess(String response) {
+                        Log.d("TabList", response);
+                        if (response != null) {
+                            try {
+                                Quit tabList = JSONUtil.fromJson(response, Quit.class);
+                                if (tabList.getRet().equals("101")) {
+                                    Toast.makeText(NewPeopleDetailActivity2.this, "" + tabList.getMsg(), Toast.LENGTH_SHORT).show();
+                                    com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils.putString(NewPeopleDetailActivity2.this, "token_id", null);
+                                    startActivity(new Intent(NewPeopleDetailActivity2.this, LoginActivity2.class));
+                                    finish();
+                                } else {
+                                    if (tabList.getRet().equals("200")) {
+
+                                        if(mRequestDialog!=null&&mRequestDialog.isShowing()){
+                                            mRequestDialog.dismiss();
+                                        }
+                                        if(NewPeopleDetailActivity2.this!=null&&!NewPeopleDetailActivity2.this.isDestroyed()&&!NewPeopleDetailActivity2.this.isFinishing()){
+                                            modifyPasswordOkDialog.show();
+                                        }
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if(modifyPasswordOkDialog!=null&&modifyPasswordOkDialog.isShowing()){
+                                                    modifyPasswordOkDialog.dismiss();
+                                                    finish();
+                                                }
+                                            }
+                                        },1000);
+
+                                    } else if (tabList.getRet().equals("201")) {
+                                        if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                                            mRequestDialog.dismiss();
+                                        }
+                                        Toast.makeText(NewPeopleDetailActivity2.this, "" + tabList.getMsg(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                                    mRequestDialog.dismiss();
+                                }
+                            }
+                        }
+
+                    }
+                })
+                .failure(new IFailure() {
+                    @Override
+                    public void onFailure() {
+                        if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                            mRequestDialog.dismiss();
+                        }
+                        Toast.makeText(NewPeopleDetailActivity2.this, "获取数据错误了", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .error(new IError() {
+                    @Override
+                    public void onError(int code, String msg) {
+                        if (mRequestDialog != null && mRequestDialog.isShowing()) {
+                            mRequestDialog.dismiss();
+                        }
+                        Toast.makeText(NewPeopleDetailActivity2.this, ""+msg, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .build()
+                .get();
+    }
+
+
+
 
     private void initData(LianMeng.DataListBean dataListBean) {
         if(dataListBean.getCustomerName()!=null){

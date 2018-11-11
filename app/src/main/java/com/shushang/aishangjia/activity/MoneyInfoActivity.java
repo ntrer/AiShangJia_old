@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +25,7 @@ public class MoneyInfoActivity extends BaseActivity {
 
     private Toolbar mToolbar;
     private TextView mTextView1,mTextView2,mTextView3,mTextView4,mTextView5,mTextView6;
+    private RelativeLayout mRelativeLayout;
     private ImageView mImageView,mImageView2;
     private List<String> imgId=new ArrayList<>();
     @Override
@@ -42,6 +44,7 @@ public class MoneyInfoActivity extends BaseActivity {
         mTextView5=findViewById(R.id.tv_prove);
         mTextView6=findViewById(R.id.et_date);
         mImageView=findViewById(R.id.pic_money);
+        mRelativeLayout=findViewById(R.id.pic_detail);
         final Intent data=getIntent();
         final LeaguesList.DataListBean dataListBean= (LeaguesList.DataListBean) data.getSerializableExtra("data");
         initData(dataListBean);
@@ -88,14 +91,14 @@ public class MoneyInfoActivity extends BaseActivity {
             mTextView6.setText(String.valueOf(simpleDateFormat.format(date)));
         }
 
-        if(dataListBean.getImageIds().equals("")||dataListBean.getImageIds()==null){
+        if(dataListBean.getImageIds()==null||dataListBean.getImageIds().equals("")){
             Log.d("getImageIds","无图言屌");
         }
         else {
             final String[] split = dataListBean.getImageIds().split(",");
             String url="http://192.168.0.55:8999/fileController.do?method=showimage&id="+split[0]+ "&token_id="+PreferencesUtils.getString(MoneyInfoActivity.this,"token_id");
             Glide.with(MoneyInfoActivity.this).load(url).into(mImageView);
-            mImageView.setOnClickListener(new View.OnClickListener() {
+            mRelativeLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(MoneyInfoActivity.this,PhotoViewActivity.class);

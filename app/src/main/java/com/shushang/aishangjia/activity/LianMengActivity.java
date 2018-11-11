@@ -270,4 +270,11 @@ public class LianMengActivity extends BaseActivity implements SwipeRefreshLayout
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==REQUEST_CODE_NEW_PEOPLE){
+            getData();
+        }
+    }
 }

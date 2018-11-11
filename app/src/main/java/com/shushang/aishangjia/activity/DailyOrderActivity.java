@@ -47,7 +47,7 @@ public class DailyOrderActivity extends BaseActivity implements View.OnClickList
         mToolbar=findViewById(R.id.toolbar);
         mEtCustomerName = (EditText) findViewById(R.id.et_customer_name);
         mEtCustomerMobile = (EditText) findViewById(R.id.et_customer_mobile);
-//        mEtCustomerMoney=findViewById(R.id.money);
+        mEtCustomerMoney=findViewById(R.id.money);
         mButton = (Button) findViewById(R.id.btn_submit);
         token_id = PreferencesUtils.getString(this, "token_id");
         mRequestDialog = ExtAlertDialog.creatRequestDialog(this, getString(R.string.submit));

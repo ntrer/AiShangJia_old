@@ -266,6 +266,7 @@
                 <View style="@style/activity_register_v_horizontal_divider" />
                 <!--装修进度-->
                 <RelativeLayout
+                    android:id="@+id/pic_detail"
                     android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_48">

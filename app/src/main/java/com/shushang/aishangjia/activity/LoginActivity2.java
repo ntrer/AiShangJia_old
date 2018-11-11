@@ -31,6 +31,7 @@ import com.shushang.aishangjia.utils.SharePreferences.PreferencesUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.shushang.aishangjia.R.id.fab;
@@ -46,7 +47,7 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
     private FloatingActionButton mFab;
     private boolean isFirst;
     private Dialog mRequestDialog;
-    private  List<Login.DataBean.ResourcesBean> resources;
+    private List<Login.DataBean.ResourcesBean> resources=new ArrayList<>();
     //退出时的时间
     private long mExitTime;
     @Override
@@ -152,21 +153,41 @@ public class LoginActivity2 extends BaseActivity implements View.OnClickListener
                                         if(login.getData().getResources()!=null&&login.getData().getResources().size()!=0){
                                             resources = login.getData().getResources();
                                             for(int i=0;i<resources.size();i++){
-                                                if( resources.get(i).getResourceNum().equals("1116")){
-                                                    PreferencesUtils.putString(mContext, "ResourceName",resources.get(i).getResourceNum());
+                                                if( resources.get(i).getResourceNum().equals("2000")){
+                                                    PreferencesUtils.putString(mContext, "ResourceName0",resources.get(i).getResourceNum());
+                                                    PreferencesUtils.putString(mContext, "ResourceName","1116");
+                                                    PreferencesUtils.putString(mContext, "ResourceName2","2212");
+                                                    PreferencesUtils.putString(mContext, "ResourceName3","2216");
+                                                    break;
+                                                }
+                                                else if(resources.get(i).getResourceNum().equals("1000")){
+                                                    PreferencesUtils.putString(mContext, "ResourceName","1116");
+                                                }
+                                                else {
+                                                    if( resources.get(i).getResourceNum().equals("1116")){
+                                                        PreferencesUtils.putString(mContext, "ResourceName",resources.get(i).getResourceNum());
+                                                    }else if( resources.get(i).getResourceNum().equals("2212")){
+                                                        PreferencesUtils.putString(mContext, "ResourceName2",resources.get(i).getResourceNum());
+                                                    }else if( resources.get(i).getResourceNum().equals("2216")){
+                                                        PreferencesUtils.putString(mContext, "ResourceName3",resources.get(i).getResourceNum());
+                                                    }
                                                 }
                                             }
                                         }
                                         else {
                                             PreferencesUtils.putString(mContext, "ResourceName",null);
+                                            PreferencesUtils.putString(mContext, "ResourceName2",null);
+                                            PreferencesUtils.putString(mContext, "ResourceName3",null);
                                         }
                                         isFirst = false;
                                         if(login.getData().getType().equals("3")){
+                                            PreferencesUtils.putString(mContext, "leagueFlag",login.getData().getLeagueFlag());
                                             startActivity(new Intent(LoginActivity2.this,MainActivity2.class));
                                         }
                                         else if(login.getData().getType().equals("7")){
                                             PreferencesUtils.putString(mContext, "shangjia_id",login.getData().getShangjia_id());
-                                            startActivity(new Intent(LoginActivity2.this,ActivityListActivity.class));
+                                            Intent intent=new Intent(LoginActivity2.this,ActivityListActivity.class);
+                                            startActivity(intent);
                                         }
                                         else {
                                             startActivity(new Intent(LoginActivity2.this,ActivityListActivity.class));

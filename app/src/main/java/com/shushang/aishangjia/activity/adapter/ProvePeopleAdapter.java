@@ -15,6 +15,6 @@ public class ProvePeopleAdapter extends BaseQuickAdapter<ProvePeople.DataListBea
 
     @Override
     protected void convert(BaseViewHolder helper, ProvePeople.DataListBean item) {
-        helper.setText(R.id.sheng_name,item.getUserName());
+        helper.setText(R.id.sheng_name,item.getUserName()+"("+item.getMerchantName()+")");
     }
 }

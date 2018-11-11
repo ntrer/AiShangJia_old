@@ -30,7 +30,12 @@ public class ScanAdapter extends BaseQuickAdapter<SignList.DataListBean,BaseView
         String url=item.getZhaopian()+ "&token_id="+PreferencesUtils.getString(mContext,"token_id");
         Log.d("图片链接",url);
         Glide.with(mContext).load(url).override(ConvertUtils.dp2px(80),ConvertUtils.dp2px(80)).centerCrop().placeholder(R.mipmap.img).into((ImageView) helper.getView(R.id.touxiang));
-        helper.setText(R.id.num,item.getTargetNum());
+        if(item.getQdlh()!=null){
+            helper.setText(R.id.num,item.getQdlh());
+        }
+        else {
+            helper.setText(R.id.num,"");
+        }
         helper.setText(R.id.label,item.getQddz());
         helper.setText(R.id.date,item.getQdsj());
         }

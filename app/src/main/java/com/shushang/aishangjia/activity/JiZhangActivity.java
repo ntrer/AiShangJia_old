@@ -264,7 +264,9 @@ public class JiZhangActivity extends BaseActivity implements DatePickerDialog.On
                                     getTabData("");
                                     mEditText1.setText("");
                                     mEditText2.setText("");
-                                    mAlbumFiles.clear();
+                                    if(mAlbumFiles.size()!=0){
+                                        mAlbumFiles.clear();
+                                    }
                                     mPicText.setText("选择图片");
                                     //获取当前时间
                                     Date date = new Date(System.currentTimeMillis());
@@ -826,32 +828,32 @@ public class JiZhangActivity extends BaseActivity implements DatePickerDialog.On
                 .builder()
                 .setCancelable(false)
                 .setCanceledOnTouchOutside(true)
-                .addSheetItem("餐饮消费", ActionSheetDialog.SheetItemColor.Blue,
+                .addSheetItem("日常生活", ActionSheetDialog.SheetItemColor.Blue,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                mYongTu.setText("餐饮消费");
+                                mYongTu.setText("日常生活");
                             }
                         })
-                .addSheetItem("出行消费", ActionSheetDialog.SheetItemColor.Blue,
+                .addSheetItem("文化娱乐", ActionSheetDialog.SheetItemColor.Blue,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                mYongTu.setText("出行消费");
+                                mYongTu.setText("文化娱乐");
                             }
                         })
-                .addSheetItem("娱乐消费", ActionSheetDialog.SheetItemColor.Blue,
+                .addSheetItem("企业工作", ActionSheetDialog.SheetItemColor.Blue,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                mYongTu.setText("娱乐消费");
+                                mYongTu.setText("企业工作");
                             }
                         })
-                .addSheetItem("购物消费", ActionSheetDialog.SheetItemColor.Blue,
+                .addSheetItem("其他收支", ActionSheetDialog.SheetItemColor.Blue,
                         new ActionSheetDialog.OnSheetItemClickListener() {
                             @Override
                             public void onClick(int which) {
-                                mYongTu.setText("购物消费");
+                                mYongTu.setText("其他收支");
                             }
                         })
                 .show();

@@ -12,7 +12,7 @@ public class Login {
     /**
      * ret : 200
      * msg : success
-     * data : {"token_id":"27c0c7522fdf48a2b9ed4f3312871597","xingming":"线索","shoujihao":"15937215511","touxiang":"","type":"3","shangjia_code":"ssdb","shangjia_id":"402880b7653b275e01653b69cc770050","shangjia_name":"数尚地板中华路","activity_id":null,"resources":[{"resourceId":"568b1d0e049d4a44a6f6e0922ad3cbbe","resourceNum":"1116","resourceType":null,"resourceName":"(销售线索)更改负责人","resourceIcon":null,"sortId":1116,"url":"clueController.do?method=assignClue","ziyuanjibie":null,"ziyuanlujing":null,"groupName":null,"type":"2","beizhu":null,"enable":"1","isDelete":"0","ip":"192.168.0.117","caoZuoRen":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533984647000,"xgsj":1533984647000,"merchantEnable":null,"companyEnable":null},{"resourceId":"4f89b64ec4014840b40fd5dc40ef24c6","resourceNum":"1112","resourceType":null,"resourceName":"(销售线索)收回分配权限","resourceIcon":null,"sortId":1112,"url":"clueController.do?method=takeBackClue","ziyuanjibie":null,"ziyuanlujing":null,"groupName":null,"type":"2","beizhu":"","enable":"1","isDelete":"0","ip":"192.168.0.117","caoZuoRen":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533984299000,"xgsj":1533984299000,"merchantEnable":null,"companyEnable":null}]}
+     * data : {"token_id":"a40874dbdf8547b4b7378802dd41584f","xingming":"联盟超级管理员","shoujihao":"13111111111","touxiang":"","type":"7","shangjia_code":"testlm1","shangjia_id":"402880b766854bd701668551f7aa000d","shangjia_name":"联盟1测试","activity_id":null,"resources":[{"resourceId":"resource444444444444444resource","resourceNum":"2000","resourceType":null,"resourceName":"联盟超级权限","resourceIcon":null,"sortId":2000,"url":"联盟所有权限","ziyuanjibie":null,"ziyuanlujing":null,"groupName":null,"type":"7","beizhu":null,"enable":"1","isDelete":"0","ip":"192.168.0.117","caoZuoRen":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1539782045000,"xgsj":1539782045000,"merchantEnable":null,"companyEnable":null}],"leagueFlag":"1"}
      * dataList : null
      * intcurrentPage : 0
      * intpageSize : 0
@@ -95,16 +95,17 @@ public class Login {
 
     public static class DataBean {
         /**
-         * token_id : 27c0c7522fdf48a2b9ed4f3312871597
-         * xingming : 线索
-         * shoujihao : 15937215511
+         * token_id : a40874dbdf8547b4b7378802dd41584f
+         * xingming : 联盟超级管理员
+         * shoujihao : 13111111111
          * touxiang :
-         * type : 3
-         * shangjia_code : ssdb
-         * shangjia_id : 402880b7653b275e01653b69cc770050
-         * shangjia_name : 数尚地板中华路
+         * type : 7
+         * shangjia_code : testlm1
+         * shangjia_id : 402880b766854bd701668551f7aa000d
+         * shangjia_name : 联盟1测试
          * activity_id : null
-         * resources : [{"resourceId":"568b1d0e049d4a44a6f6e0922ad3cbbe","resourceNum":"1116","resourceType":null,"resourceName":"(销售线索)更改负责人","resourceIcon":null,"sortId":1116,"url":"clueController.do?method=assignClue","ziyuanjibie":null,"ziyuanlujing":null,"groupName":null,"type":"2","beizhu":null,"enable":"1","isDelete":"0","ip":"192.168.0.117","caoZuoRen":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533984647000,"xgsj":1533984647000,"merchantEnable":null,"companyEnable":null},{"resourceId":"4f89b64ec4014840b40fd5dc40ef24c6","resourceNum":"1112","resourceType":null,"resourceName":"(销售线索)收回分配权限","resourceIcon":null,"sortId":1112,"url":"clueController.do?method=takeBackClue","ziyuanjibie":null,"ziyuanlujing":null,"groupName":null,"type":"2","beizhu":"","enable":"1","isDelete":"0","ip":"192.168.0.117","caoZuoRen":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1533984299000,"xgsj":1533984299000,"merchantEnable":null,"companyEnable":null}]
+         * resources : [{"resourceId":"resource444444444444444resource","resourceNum":"2000","resourceType":null,"resourceName":"联盟超级权限","resourceIcon":null,"sortId":2000,"url":"联盟所有权限","ziyuanjibie":null,"ziyuanlujing":null,"groupName":null,"type":"7","beizhu":null,"enable":"1","isDelete":"0","ip":"192.168.0.117","caoZuoRen":"asdfghjkl123qwertg","xiugairen":"asdfghjkl123qwertg","cjsj":1539782045000,"xgsj":1539782045000,"merchantEnable":null,"companyEnable":null}]
+         * leagueFlag : 1
          */
 
         private String token_id;
@@ -116,6 +117,7 @@ public class Login {
         private String shangjia_id;
         private String shangjia_name;
         private Object activity_id;
+        private String leagueFlag;
         private List<ResourcesBean> resources;
 
         public String getToken_id() {
@@ -190,6 +192,14 @@ public class Login {
             this.activity_id = activity_id;
         }
 
+        public String getLeagueFlag() {
+            return leagueFlag;
+        }
+
+        public void setLeagueFlag(String leagueFlag) {
+            this.leagueFlag = leagueFlag;
+        }
+
         public List<ResourcesBean> getResources() {
             return resources;
         }
@@ -200,25 +210,25 @@ public class Login {
 
         public static class ResourcesBean {
             /**
-             * resourceId : 568b1d0e049d4a44a6f6e0922ad3cbbe
-             * resourceNum : 1116
+             * resourceId : resource444444444444444resource
+             * resourceNum : 2000
              * resourceType : null
-             * resourceName : (销售线索)更改负责人
+             * resourceName : 联盟超级权限
              * resourceIcon : null
-             * sortId : 1116
-             * url : clueController.do?method=assignClue
+             * sortId : 2000
+             * url : 联盟所有权限
              * ziyuanjibie : null
              * ziyuanlujing : null
              * groupName : null
-             * type : 2
+             * type : 7
              * beizhu : null
              * enable : 1
              * isDelete : 0
              * ip : 192.168.0.117
              * caoZuoRen : asdfghjkl123qwertg
              * xiugairen : asdfghjkl123qwertg
-             * cjsj : 1533984647000
-             * xgsj : 1533984647000
+             * cjsj : 1539782045000
+             * xgsj : 1539782045000
              * merchantEnable : null
              * companyEnable : null
              */

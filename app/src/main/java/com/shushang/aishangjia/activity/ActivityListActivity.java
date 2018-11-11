@@ -76,7 +76,6 @@ public class ActivityListActivity extends BaseActivity {
     private CustomersBeanDao customersBeanDao;
     private ActivityBeanDao activityBeanDao;
     private static DaoSession daoSession;
-
     @Override
     public int setLayout() {
         return R.layout.activity_list;
@@ -90,6 +89,7 @@ public class ActivityListActivity extends BaseActivity {
         mProgressBar=findViewById(R.id.loading);
         mRequestDialog = ExtAlertDialog.creatRequestDialog(ActivityListActivity.this, getString(R.string.getDataBase));
         mRequestDialog.setCancelable(false);
+        Intent intent=getIntent();
         token_id = PreferencesUtils.getString(this, "token_id");
         type=PreferencesUtils.getString(this, "type");
         mButton= (Button) findViewById(R.id.btn_quit);

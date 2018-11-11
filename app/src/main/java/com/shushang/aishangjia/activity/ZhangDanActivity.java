@@ -62,6 +62,9 @@ public class ZhangDanActivity extends BaseActivity implements BaseQuickAdapter.R
     private ZhangDanAdapter mZhangDanAdapter;
     private String  token_id = PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "token_id");
     private String shangjia_id= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "shangjia_id");
+    private String type= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(), "type");
+    private String ResourceName3= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(),"ResourceName3");
+    private String ResourceName0= PreferencesUtils.getString(MyApplication.getInstance().getApplicationContext(),"ResourceName0");
     private String  leagueId=null;
     private boolean noTab=false;
     public Handler mHandler=new Handler(new Handler.Callback() {
@@ -376,8 +379,11 @@ public class ZhangDanActivity extends BaseActivity implements BaseQuickAdapter.R
         mZhangDanAdapter.setOnLoadMoreListener(this, mRvZhangdan);
         mZhangDanAdapter.addHeaderView(mView);
         if(isFirst){
-            Log.d("真",isFirst+"");
-            mRvZhangdan.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(MyApplication.getInstance().getApplicationContext()));
+            if(type.equals("7")){
+                if(ResourceName3!=null){
+                    mRvZhangdan.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(MyApplication.getInstance().getApplicationContext()));
+                }
+            }
         }
         mZhangDanAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
