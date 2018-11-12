@@ -9,5 +9,5 @@ public class BaseUrl {
 
 //    public final static String BASE_URL="http://192.168.0.55/";
 
-//    public final static String BASE_URL="http://192.168.0.110:8999/asj_old/";
+//    public final static String BASE_URL="http://192.168.0.103:8999/asj_old/";
 }

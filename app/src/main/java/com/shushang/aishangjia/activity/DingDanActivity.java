@@ -160,24 +160,25 @@ public class DingDanActivity extends BaseActivity {
                     mButton= (Button) adapter.getViewByPosition(mRvDingdan,position,R.id.youhui_btn);
                     value = Integer.parseInt(mTextView3.getText().toString());
                     switch (itemViewId) {
-//                    case R.id.delete:
-//                        ExtAlertDialog.showSureDlg(DingDanActivity.this, "注意！", "要删除此商品吗?", "确定", new ExtAlertDialog.IExtDlgClick() {
-//                            @Override
-//                            public void Oclick(int result) {
-//                                if (result == 1) {
-//                                    mDingDanAdapter.remove(position);
-//                                    if (mDataListBeans.size() == 0) {
-//                                        finish();
-//                                    }
-//                                }
-//                            }
-//                        });
-//                        break;
+                    case R.id.delete:
+                        ExtAlertDialog.showSureDlg(DingDanActivity.this, "注意！", "要删除此商品吗?", "确定", new ExtAlertDialog.IExtDlgClick() {
+                            @Override
+                            public void Oclick(int result) {
+                                if (result == 1) {
+                                    mDingDanAdapter.remove(position);
+                                    if (mDataListBeans.size() == 0) {
+                                        finish();
+                                    }
+                                }
+                            }
+                        });
+                        break;
                         case R.id.btn_add:
                             value++;
                             mTextView3.setText(value+"");
                             mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*value)+"");
                             dataListBeans.get(position).setValue(String.valueOf(value));
+                            dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView.getText().toString()))));
                             // mTextView.setText(dataListBeans.get(position).getGoodsRetailPrice()*count+"");
                             break;
 
@@ -187,6 +188,7 @@ public class DingDanActivity extends BaseActivity {
                                 mTextView3.setText(value+"");
                                 mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*(value+1)-Double.parseDouble(mTextView2.getText().toString()))+"");
                                 dataListBeans.get(position).setValue(String.valueOf(value));
+                                dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView.getText().toString()))));
                             }
                             break;
                         case R.id.youhui_btn:
@@ -205,7 +207,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                     dataListBeans.get(position).setYouhui("1.0");
+                                                     dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                     dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                             Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -219,7 +225,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.9");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -234,7 +244,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.8");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -248,7 +262,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.7");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -262,7 +280,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.6");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -277,7 +299,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.5");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -291,7 +317,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.4");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -305,7 +335,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.3");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
 
                                                 }
                                             })
@@ -319,7 +353,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.2");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
                                                 }
                                             })
                                     .addSheetItem("0.1", ActionSheetDialog.SheetItemColor.Blue,
@@ -332,7 +370,11 @@ public class DingDanActivity extends BaseActivity {
                                                             *(Double.parseDouble(mButton.getText().toString())))+"");
                                                     mTextView.setText(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
                                                             Integer.parseInt(mTextView3.getText().toString()))+"");
-
+                                                    dataListBeans.get(position).setYouhui("0.1");
+                                                    dataListBeans.get(position).setYouhuidanjia(formatDouble4(mDataListBeans.get(position).getGoodsRetailPrice()
+                                                            *(Double.parseDouble(mButton.getText().toString())))+"");
+                                                    dataListBeans.get(position).setGoodsTotalPrice(Double.parseDouble(formatDouble4(Double.parseDouble(mTextView2.getText().toString())*
+                                                            Integer.parseInt(mTextView3.getText().toString()))));
                                                 }
                                             })
                                     .show();

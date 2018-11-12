@@ -29,11 +29,21 @@
             />
     </android.support.v7.widget.Toolbar>
 
+    <ScrollView
+        android:layout_below="@id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/ll_total"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/toolbar"
         android:layout_height="wrap_content">
 
         <TextView
@@ -283,26 +293,32 @@
 
     </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/bottom_edit2"
+            android:orientation="horizontal"
+            android:background="@drawable/register_btn_bg_selector"
+            android:gravity="center"
+            android:visibility="visible"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40">
 
-    <LinearLayout
-        android:id="@+id/bottom_edit2"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40">
+            <TextView
+                android:layout_marginLeft="@dimen/dp_5"
+                android:text="提交订单"
+                android:textColor="@color/color_w"
+                android:textSize="@dimen/sp_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
-        <TextView
-            android:layout_marginLeft="@dimen/dp_5"
-            android:text="提交订单"
-            android:textColor="@color/color_w"
-            android:textSize="@dimen/sp_16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        </LinearLayout>
 
     </LinearLayout>
+
+    </ScrollView>
 
 
 </RelativeLayout>

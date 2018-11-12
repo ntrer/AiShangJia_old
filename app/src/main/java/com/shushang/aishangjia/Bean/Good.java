@@ -131,6 +131,25 @@ public class Good {
         private String merchantCode;
         private String merchantName;
         private String beizhu;
+        private String youhuidanjia;
+
+        public String getYouhuidanjia() {
+            return youhuidanjia;
+        }
+
+        public void setYouhuidanjia(String youhuidanjia) {
+            this.youhuidanjia = youhuidanjia;
+        }
+
+        public String getYouhui() {
+            return youhui;
+        }
+
+        public void setYouhui(String youhui) {
+            this.youhui = youhui;
+        }
+
+        private String youhui;
 
         public double getGoodsTotalPrice() {
             return goodsTotalPrice;

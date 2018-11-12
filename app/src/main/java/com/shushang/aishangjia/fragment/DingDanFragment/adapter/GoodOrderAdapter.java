@@ -72,7 +72,14 @@ public class GoodOrderAdapter extends BaseQuickAdapter<GoodsOrder.DataListBean,B
      }
 
      if(String.valueOf(item.getDikoujia())!=null){
-         helper.setText(R.id.dingdan_money,"抵扣金额:"+item.getDikoujia()+"");
+         helper.setText(R.id.dingdan_money,"抵扣金额:"+item.getDikoujia()+"元");
+     }
+
+     if(item.getOrders().size()!=0){
+         helper.setText(R.id.dingdan_dingjin,"订金:"+item.getOrders().size()+"单");
+     }
+     else {
+         helper.setText(R.id.dingdan_dingjin,"订金:0单");
      }
 
 

@@ -49,7 +49,7 @@ public class DingDanAdapter extends BaseQuickAdapter<Good.DataListBean,BaseViewH
 
     @Override
     protected void convert(final BaseViewHolder helper, final Good.DataListBean item) {
-//        helper.addOnClickListener(R.id.delete);
+        helper.addOnClickListener(R.id.delete);
         helper.addOnClickListener(R.id.btn_reduce);
         helper.addOnClickListener(R.id.btn_add);
         helper.addOnClickListener(R.id.youhui_btn);
@@ -68,33 +68,41 @@ public class DingDanAdapter extends BaseQuickAdapter<Good.DataListBean,BaseViewH
 
 
         if(String.valueOf(item.getGoodsRetailPrice())!=null){
-            helper.setText(R.id.youhui_danjia_price,item.getGoodsRetailPrice()+"");
             helper.setText(R.id.lingshou_price,item.getGoodsRetailPrice()+"");
         }
 
+        if(item.getYouhuidanjia()==null||item.getYouhuidanjia().equals("")){
+            helper.setText(R.id.youhui_danjia_price,item.getGoodsRetailPrice()+"");
+        }
+        else {
+            helper.setText(R.id.youhui_danjia_price,item.getYouhuidanjia()+"");
+        }
+
+        if(item.getYouhui()==null||item.getYouhui().equals("")){
+            helper.setText(R.id.youhui_btn,"优惠1.0");
+        }
+        else {
+            helper.setText(R.id.youhui_btn,item.getYouhui());
+        }
 
         if(item.getGoodsSpecs()!=null){
             helper.setText(R.id.guige,"规格:"+item.getGoodsSpecs());
         }
 
-        if(String.valueOf(item.getGoodsRetailPrice())!=null){
+        if(String.valueOf(item.getGoodsTotalPrice())==null||String.valueOf(item.getGoodsTotalPrice()).equals("0.0")){
             helper.setText(R.id.total_money_text,item.getGoodsRetailPrice()+"");
+        }
+       else {
+            helper.setText(R.id.total_money_text,item.getGoodsTotalPrice()+"");
         }
 
 
-//        if(String.valueOf(item.getGoodsTotalPrice())==null){
-//            helper.setText(R.id.total_money_text,item.getGoodsRetailPrice()+"");
-//        }
-//        else {
-//            helper.setText(R.id.total_money_text,item.getGoodsTotalPrice()+"");
-//        }
-//
-//        if(item.getValue()==null){
-//            helper.setText(R.id.tv_count,"1");
-//        }
-//        else {
-//            helper.setText(R.id.tv_count,item.getValue()+"");
-//        }
+        if(item.getValue()==null){
+            helper.setText(R.id.tv_count,"1");
+        }
+        else {
+            helper.setText(R.id.tv_count,item.getValue()+"");
+        }
 
     }
 }
